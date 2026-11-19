@@ -31,23 +31,28 @@ def label(x: int, y: int, text: str, size: int = 16, color: str = INK) -> str:
 
 def ch00() -> str:
     parts = []
-    # 马：几何侧影
-    parts += [f'<rect x="70" y="185" width="120" height="62" fill="none"/>',
+    # 马代表模型；第七道模型自拒标在马身上
+    parts += ['<rect x="70" y="185" width="120" height="62"/>',
               '<path d="M190 185 L225 155 L248 166 L232 205 L190 220 Z"/>',
               '<path d="M70 247 L58 320 M110 247 L104 320 M165 247 L178 320 M190 240 L215 315"/>',
-              '<path d="M70 200 L40 185 L52 168"/>', label(96, 360, "MODEL", 18)]
-    # 七道闸门
-    for i in range(7):
+              '<path d="M70 200 L40 185 L52 168"/>',
+              f'<circle cx="150" cy="150" r="22" stroke="{ACCENT}" stroke-width="2"/>',
+              label(140, 155, "M7", 12, ACCENT),
+              f'<path d="M160 170 L178 190" stroke="{ACCENT}"/>',
+              label(96, 360, "MODEL", 18)]
+    # 六道宿主闸门
+    for i in range(6):
         x = 300 + i * 42
         parts += [f'<rect x="{x}" y="120" width="10" height="180" fill="{INK if i % 2 else "none"}"/>',
                   label(x - 2, 110, str(i + 1), 14)]
-    parts.append('<path d="M250 300 L660 300" stroke-dasharray="6 6"/>')
+    parts.append('<path d="M250 300 L560 300" stroke-dasharray="6 6"/>')
     # 车：焊死的门
     parts += ['<path d="M620 250 L645 200 L720 200 L750 250 Z"/>',
               '<rect x="600" y="250" width="160" height="52"/>',
               '<circle cx="635" cy="306" r="16"/><circle cx="725" cy="306" r="16"/>',
               label(640, 360, "HARNESS", 18)]
-    return frame("".join(parts), "chap00 horse and car")
+    return frame("".join(parts), "chap00 six host gates and model refusal")
+ 
 
 
 def ch01() -> str:
@@ -121,7 +126,7 @@ def ch05() -> str:
     parts = []
     parts += ['<rect x="70" y="90" width="240" height="210"/>',
               '<rect x="490" y="90" width="240" height="210"/>',
-              label(110, 130, "DISPATCH", 20), label(530, 130, "OPERATOR", 20)]
+              label(110, 130, "DISPATCH", 20), label(530, 130, "EXECUTOR", 20)]
     for i in range(3):
         parts.append(f'<path d="M110 {170+i*36} L270 {170+i*36}" stroke="{MUTED}"/>')
         parts.append(f'<path d="M530 {170+i*36} L690 {170+i*36}" stroke="{MUTED}"/>')
@@ -130,7 +135,7 @@ def ch05() -> str:
               '<path d="M320 255 L480 255" stroke-dasharray="8 8"/>',
               '<path d="M350 238 L450 272 M450 238 L350 272" stroke="currentColor" stroke-width="3"/>',
               label(330, 292, "TRIGGER", 16, ACCENT),
-              '<path d="M70 340 L730 340"/>', label(70, 372, "ACCOUNTABLE LOG", 18)]
+              '<path d="M70 340 L730 340"/>', label(70, 372, "EVIDENCE LEDGER", 18)]
     return frame("".join(parts), "chap05 commander")
 
 
