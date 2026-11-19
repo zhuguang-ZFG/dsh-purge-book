@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-"""生成每章一张 FA-029 几何图解插画（普鲁士蓝配色）。
+"""生成卷首手绘扉页与每章一张 FA-029 几何图解插画（普鲁士蓝配色）。
 
-输出 illustrations/ch00.svg … ch07.svg；源文件随仓库维护，构建时复制到 figures 目录。
+输出 illustrations/front.svg 与 ch00.svg … ch07.svg；源文件随仓库维护，构建时复制到 figures 目录。
+线条在生成时做可复现的墨线抖动与轻二次描边，得到手绘感；随机种子由图题决定。
 图中只用编号与拉丁字母，中文释义写在 Markdown 图注里，避免阅读器字体差异。
 """
+import math
+import random
+import re
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -13,13 +18,269 @@ PAPER = "#f6f1e6"
 MUTED = "#7d8b93"
 ACCENT = "#b3541e"
 
+TOKEN = re.compile(r"[MmLlHhVvQqTtCcSsAaZz]|[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?")
+COMMANDS = set("MmLlHhVvQqTtCcSsAaZz")
+SHAPE = re.compile(r"<(path|rect|circle)\b([^>]*)/>")
+ATTR = re.compile(r'([\w:-]+)\s*=\s*"([^"]*)"')
+
+
+def fmt(value: float) -> str:
+    return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
+def parse_path(d: str):
+    """Parse the subset used by this file: M/L/H/V/Q/Z, absolute or relative."""
+    tokens = TOKEN.findall(d)
+    i = 0
+    pos = (0.0, 0.0)
+    start = pos
+    command = None
+    subpaths = []
+    current = None
+
+    def number():
+        nonlocal i
+        value = float(tokens[i])
+        i += 1
+        return value
+
+    while i < len(tokens):
+        token = tokens[i]
+        if token in COMMANDS:
+            command = token
+            i += 1
+            if command in "Zz":
+                if current is not None:
+                    if math.dist(pos, start) > 1e-6:
+                        current.append(("line", pos, start))
+                    subpaths[-1][1] = True
+                current = None
+                pos = start
+            continue
+        if command is None:
+            raise ValueError(f"path data starts with a number: {d!r}")
+        relative = command.islower()
+        kind = command.upper()
+        if kind == "M":
+            x, y = number(), number()
+            if relative:
+                x += pos[0]
+                y += pos[1]
+            pos = (x, y)
+            start = pos
+            current = []
+            subpaths.append([current, False])
+            command = "l" if relative else "L"
+        elif kind == "L":
+            x, y = number(), number()
+            if relative:
+                x += pos[0]
+                y += pos[1]
+            if current is None:
+                current = []
+                subpaths.append([current, False])
+            current.append(("line", pos, (x, y)))
+            pos = (x, y)
+        elif kind == "H":
+            x = number()
+            if relative:
+                x += pos[0]
+            if current is None:
+                current = []
+                subpaths.append([current, False])
+            current.append(("line", pos, (x, pos[1])))
+            pos = (x, pos[1])
+        elif kind == "V":
+            y = number()
+            if relative:
+                y += pos[1]
+            if current is None:
+                current = []
+                subpaths.append([current, False])
+            current.append(("line", pos, (pos[0], y)))
+            pos = (pos[0], y)
+        elif kind == "Q":
+            cx, cy = number(), number()
+            x, y = number(), number()
+            if relative:
+                cx += pos[0]
+                cy += pos[1]
+                x += pos[0]
+                y += pos[1]
+            if current is None:
+                current = []
+                subpaths.append([current, False])
+            current.append(("quad", pos, (cx, cy), (x, y)))
+            pos = (x, y)
+        else:
+            raise ValueError(f"unsupported path command {kind}")
+    return subpaths
+
+
+def rough_line(p0, p1, rng, amp):
+    dx, dy = p1[0] - p0[0], p1[1] - p0[1]
+    length = math.hypot(dx, dy)
+    if length < 1e-6:
+        return [p0, p1]
+    nx, ny = -dy / length, dx / length
+    steps = max(2, min(28, int(length / 18) + 1))
+    phase = rng.uniform(0, 2 * math.pi)
+    frequency = rng.uniform(1.0, 2.2)
+    points = []
+    for step in range(steps):
+        t = step / steps
+        base = (p0[0] + dx * t, p0[1] + dy * t)
+        wobble = amp * math.sin(math.pi * t) * (
+            0.78 * math.sin(2 * math.pi * frequency * t + phase)
+            + 0.22 * rng.uniform(-1.0, 1.0)
+        )
+        points.append((base[0] + nx * wobble, base[1] + ny * wobble))
+    points.append(p1)
+    return points
+
+
+def rough_quad(p0, control, p1, rng, amp):
+    approximate = math.dist(p0, control) + math.dist(control, p1)
+    steps = max(6, min(32, int(approximate / 16) + 1))
+    phase = rng.uniform(0, 2 * math.pi)
+    frequency = rng.uniform(1.0, 2.0)
+    points = []
+    for step in range(steps):
+        t = step / steps
+        base = (
+            (1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * control[0] + t ** 2 * p1[0],
+            (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * control[1] + t ** 2 * p1[1],
+        )
+        dx = 2 * (1 - t) * (control[0] - p0[0]) + 2 * t * (p1[0] - control[0])
+        dy = 2 * (1 - t) * (control[1] - p0[1]) + 2 * t * (p1[1] - control[1])
+        norm = math.hypot(dx, dy) or 1.0
+        nx, ny = -dy / norm, dx / norm
+        wobble = amp * math.sin(math.pi * t) * (
+            0.75 * math.sin(2 * math.pi * frequency * t + phase)
+            + 0.25 * rng.uniform(-1.0, 1.0)
+        )
+        points.append((base[0] + nx * wobble, base[1] + ny * wobble))
+    points.append(p1)
+    return points
+
+
+def rough_rect(x, y, width, height, rng, amp):
+    points = [(x, y)]
+    for corner in ((x + width, y), (x + width, y + height), (x, y + height), (x, y)):
+        points.extend(rough_line(points[-1], corner, rng, amp)[1:])
+    return points
+
+
+def rough_circle(cx, cy, radius, rng, amp):
+    steps = 30
+    phase = rng.uniform(0, 2 * math.pi)
+    points = []
+    for step in range(steps):
+        angle = 2 * math.pi * step / steps
+        r = radius + amp * (
+            0.72 * math.sin(3 * angle + phase) + 0.28 * math.sin(7 * angle + phase * 2)
+        )
+        points.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
+    points.append(points[0])
+    return points
+
+
+def points_to_d(points, closed):
+    out = []
+    last = None
+    for point in points:
+        if last is not None and math.dist(point, last) < 0.01:
+            continue
+        out.append(("M" if last is None else "L") + f" {fmt(point[0])} {fmt(point[1])}")
+        last = point
+    if closed:
+        out.append("Z")
+    return " ".join(out)
+
+
+def rough_element(tag, raw_attrs, rng, amp):
+    attrs = dict(ATTR.findall(raw_attrs))
+    if tag == "path":
+        subpaths = parse_path(attrs.pop("d"))
+        coords = [point for segments, _ in subpaths for segment in segments for point in segment[1:]]
+        if coords:
+            xs = [point[0] for point in coords]
+            ys = [point[1] for point in coords]
+            diagonal = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
+            if diagonal < 30:
+                amp = min(amp, max(0.35, diagonal * 0.055))
+        parts = []
+        for segments, closed in subpaths:
+            points = []
+            for segment in segments:
+                if segment[0] == "line":
+                    chunk = rough_line(segment[1], segment[2], rng, amp)
+                else:
+                    chunk = rough_quad(segment[1], segment[2], segment[3], rng, amp)
+                points.extend(chunk if not points else chunk[1:])
+            if points:
+                parts.append(points_to_d(points, closed))
+        d = " ".join(parts)
+    elif tag == "rect":
+        x, y = float(attrs.pop("x")), float(attrs.pop("y"))
+        width, height = float(attrs.pop("width")), float(attrs.pop("height"))
+        amp = min(amp, max(0.35, min(width, height) * 0.08))
+        d = points_to_d(rough_rect(x, y, width, height, rng, amp), True)
+    elif tag == "circle":
+        cx, cy = float(attrs.pop("cx")), float(attrs.pop("cy"))
+        radius = float(attrs.pop("r"))
+        amp = min(amp, max(0.35, radius * 0.08))
+        d = points_to_d(rough_circle(cx, cy, radius, rng, amp), True)
+    else:
+        return None
+    attrs.setdefault("stroke-linecap", "round")
+    attrs.setdefault("stroke-linejoin", "round")
+    rendered = " ".join(f'{key}="{value}"' for key, value in attrs.items())
+    return f'<path d="{d}" {rendered}/>'
+
+
+def roughen_fragment(fragment, rng, default_stroke=INK):
+    """Turn geometric primitives into hand-drawn ink strokes.
+
+    The first pass wobbles every line; plain ink outlines get a lighter second pass,
+    like a pen going over the same contour twice. Text elements are left untouched.
+    """
+    def replace(match):
+        tag, raw_attrs = match.group(1), match.group(2)
+        info = dict(ATTR.findall(raw_attrs))
+        stroke = info.get("stroke", default_stroke)
+        primary = rough_element(tag, raw_attrs, rng, 1.15)
+        if primary is None:
+            return match.group(0)
+        second = ""
+        if (
+            stroke in (INK, "currentColor")
+            and "stroke-dasharray" not in info
+            and info.get("fill", "none") == "none"
+        ):
+            child = rough_element(
+                tag, raw_attrs, random.Random(rng.randrange(1 << 30)), 1.15 * 1.25
+            )
+            if child:
+                second = child.replace("/>", ' opacity="0.5"/>')
+        return primary + second
+
+    return SHAPE.sub(replace, fragment)
+
 
 def frame(inner: str, title: str) -> str:
+    rng = random.Random(zlib.crc32(title.encode("utf-8")))
+    border = rough_element(
+        "rect",
+        f'x="16" y="16" width="768" height="388" fill="none" stroke="{INK}" stroke-width="2"',
+        random.Random(zlib.crc32((title + ":border").encode("utf-8"))),
+        1.0,
+    )
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="{title}">
 <title>{title}</title>
 <rect width="800" height="420" fill="{PAPER}"/>
-<rect x="16" y="16" width="768" height="388" fill="none" stroke="{INK}" stroke-width="2"/>
-<g fill="none" stroke="{INK}" stroke-width="2" stroke-linejoin="round">{inner}</g>
+{border}
+<g fill="none" stroke="{INK}" stroke-width="2" stroke-linejoin="round">{roughen_fragment(inner, rng)}</g>
 </svg>
 '''
 
@@ -27,6 +288,15 @@ def frame(inner: str, title: str) -> str:
 def label(x: int, y: int, text: str, size: int = 16, color: str = INK) -> str:
     return (f'<text x="{x}" y="{y}" fill="{color}" stroke="none" '
             f'font-family="sans-serif" font-size="{size}">{text}</text>')
+
+
+def text_center(x: int, y: int, text: str, size: int = 16, color: str = INK,
+                weight: str = "normal", spacing: int = 0) -> str:
+    extra = f' font-weight="{weight}"' if weight != "normal" else ""
+    if spacing:
+        extra += f' letter-spacing="{spacing}"'
+    return (f'<text x="{x}" y="{y}" text-anchor="middle" fill="{color}" stroke="none" '
+            f'font-family="sans-serif" font-size="{size}"{extra}>{text}</text>')
 
 
 def ch00() -> str:
@@ -170,10 +440,63 @@ def ch07() -> str:
     return frame("".join(parts), "chap07 loop")
 
 
+def front() -> str:
+    """卷首扉页：马（模型）拉车（宿主），车上七道小门，扳手（插件）卸下最后一枚门闩。"""
+    parts = []
+    parts.append(text_center(400, 86, "CHAIZHA", 52, INK, "bold", 8))
+    parts.append(text_center(400, 114, "SEVEN GATES / ONE PATH", 15, MUTED, "normal", 4))
+    parts.append(f'<path d="M312 98 L488 98" stroke="{ACCENT}" stroke-width="2"/>')
+
+    # 地平线
+    parts.append('<path d="M70 330 L730 330" stroke-dasharray="5 7"/>')
+
+    # 马：躯干、颈头、耳朵、四条腿、尾与鬃；M7 是模型自身的第七道闸
+    parts.append('<path d="M78 245 L78 210 Q80 192 108 190 L168 190 Q190 192 194 212 L194 245 Z"/>')
+    parts.append('<path d="M168 200 L204 160 L236 170 L220 205 L194 220"/>')
+    parts.append('<path d="M204 160 L198 145 L214 154"/>')
+    parts.append('<path d="M90 245 L82 320 M118 245 L116 320 M160 245 L168 320 M188 244 L198 320"/>')
+    parts.append('<path d="M78 210 Q50 200 42 170"/>')
+    parts.append('<path d="M200 165 Q185 150 170 160"/>')
+    parts.append(f'<circle cx="222" cy="181" r="3" fill="{INK}"/>')
+    parts.append(f'<circle cx="130" cy="176" r="18" stroke="{ACCENT}"/>')
+    parts.append(text_center(130, 181, "M7", 11, ACCENT))
+
+    # 缰绳/挽具线接到车上
+    parts.append('<path d="M194 226 L350 240" stroke-dasharray="5 7"/>')
+
+    # 车：顶棚、车身、两只轮
+    parts.append('<path d="M380 220 L410 190 L570 190 L600 220 Z"/>')
+    parts.append('<rect x="350" y="220" width="250" height="70"/>')
+    parts.append('<circle cx="400" cy="305" r="26"/><circle cx="560" cy="305" r="26"/>')
+    parts.append('<circle cx="400" cy="305" r="9"/><circle cx="560" cy="305" r="9"/>')
+
+    # 车侧七道小门
+    for i in range(7):
+        x = 362 + i * 34
+        parts.append(f'<path d="M{x} 285 L{x} 247 Q{x+11} 230 {x+22} 247 L{x+22} 285"/>')
+
+    # 扳手（插件）正在卸下第七道门闩
+    parts.append('<circle cx="690" cy="230" r="14"/>')
+    parts.append('<path d="M690 244 L690 292 M690 258 L650 270 M690 258 L710 278 '
+                 'M690 292 L675 325 M690 292 L706 325"/>')
+    parts.append('<path d="M650 270 L615 262"/>')
+    parts.append('<path d="M615 262 Q606 254 600 262 Q606 270 615 266"/>')
+    parts.append(f'<circle cx="592" cy="262" r="6" stroke="{ACCENT}"/>')
+    parts.append(f'<path d="M584 250 L578 244 M600 250 L606 244 M584 274 L578 280" stroke="{ACCENT}"/>')
+
+    # 三层关系与底部署名
+    parts.append(text_center(120, 355, "MODEL", 18, INK))
+    parts.append(text_center(475, 355, "HARNESS", 18, INK))
+    parts.append(text_center(690, 355, "PLUGIN", 18, INK))
+    parts.append(text_center(400, 392, "86 PATCHES / 25 LAYERS / ONE ECHO", 13, MUTED, "normal", 3))
+    return frame("".join(parts), "frontispiece: horse, cart, seven gates")
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    for name, build in [("ch00", ch00), ("ch01", ch01), ("ch02", ch02), ("ch03", ch03),
-                        ("ch04", ch04), ("ch05", ch05), ("ch06", ch06), ("ch07", ch07)]:
+    for name, build in [("front", front), ("ch00", ch00), ("ch01", ch01), ("ch02", ch02),
+                        ("ch03", ch03), ("ch04", ch04), ("ch05", ch05), ("ch06", ch06),
+                        ("ch07", ch07)]:
         path = OUT / f"{name}.svg"
         path.write_text(build(), encoding="utf-8")
         print(f"{path.name}: {path.stat().st_size} bytes")

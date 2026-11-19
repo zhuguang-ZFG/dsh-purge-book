@@ -27,6 +27,9 @@ blocks = sum(
 )
 check(blocks == 8, f"源中 Mermaid 图块为 8（实际 {blocks}）")
 
+plates = sorted((ROOT / "illustrations").glob("*.svg"))
+check(len(plates) == 9, f"手绘插图源文件为 9（实际 {len(plates)}）")
+
 reader = PdfReader(PDF)
 pdf_text = "\n".join(page.extract_text() or "" for page in reader.pages)
 for token in TOKENS:
@@ -37,7 +40,8 @@ check(len(reader.pages) >= 40, f"PDF 页数 >= 40（实际 {len(reader.pages)}�
 with zipfile.ZipFile(EPUB) as archive:
     names = archive.namelist()
     svg = [n for n in names if n.lower().endswith(".svg")]
-    check(len(svg) >= blocks, f"EPUB 内嵌 SVG >= {blocks}（实际 {len(svg)}）")
+    expected_svg = blocks + 9  # 8 Mermaid + 9 手绘板（卷首 + ch00–ch07）
+    check(len(svg) >= expected_svg, f"EPUB 内嵌 SVG >= {expected_svg}（实际 {len(svg)}）")
     chapters = [n for n in names if re.match(r"EPUB/text/ch\d+\.xhtml$", n)]
     check(len(chapters) == 11, f"EPUB 章节文档为 11（实际 {len(chapters)}）")
     xhtml = "".join(
@@ -47,6 +51,7 @@ with zipfile.ZipFile(EPUB) as archive:
     check("\\|" not in xhtml, "EPUB 无表格转义残留 \\|")
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
+check("illustrations/front.svg" in readme, "README 引用卷首插画")
 path_section = readme.split("## 学习路径", 1)[1].split("## ", 1)[0]
 check("通过标准" in path_section, "README 学习路径含各阶段通过标准")
 
