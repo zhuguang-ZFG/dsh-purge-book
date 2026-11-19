@@ -50,6 +50,42 @@ with zipfile.ZipFile(EPUB) as archive:
     check("sourceCode mermaid" not in xhtml, "EPUB 无未渲染的 mermaid 代码块")
     check("\\|" not in xhtml, "EPUB 无表格转义残留 \\|")
 
+    opf_name = next(n for n in names if n.endswith(".opf"))
+    opf = archive.read(opf_name).decode("utf-8", "replace")
+    metadata = (ROOT / "build" / "metadata.yaml").read_text(encoding="utf-8")
+    author_match = re.search(r'^author:\s*"([^"]*)"', metadata, re.M)
+    author = author_match.group(1).strip() if author_match else ""
+    check(bool(author), "build/metadata.yaml 含作者署名")
+    creator = re.search(r"<dc:creator[^>]*>(.*?)</dc:creator>", opf)
+    creator_name = creator.group(1).strip() if creator else ""
+    check(bool(creator_name), "EPUB dc:creator 非空")
+    check(creator_name == author, f"EPUB 作者与 metadata.yaml 一致（{creator_name!r} / {author!r}）")
+
+    cover_meta = re.search(r'<meta[^>]*name="cover"[^>]*>', opf)
+    cover_id = re.search(r'content="([^"]+)"', cover_meta.group(0)) if cover_meta else None
+    check(bool(cover_id), "EPUB 含 cover 元数据")
+    cover_tag = ""
+    if cover_id:
+        cover_tag = next(
+            (tag for tag in re.findall(r"<item\b[^>]*/>", opf) if f'id="{cover_id.group(1)}"' in tag),
+            "",
+        )
+    check(bool(cover_tag), "cover 元数据指向清单条目")
+    check('properties="cover-image"' in cover_tag, "封面条目声明 cover-image")
+    href_match = re.search(r'href="([^"]+)"', cover_tag)
+    cover_href = href_match.group(1) if href_match else ""
+    check(cover_href.lower().endswith((".png", ".jpg", ".jpeg", ".gif")), f"封面为位图（{cover_href or '缺失'}）")
+    cover_path = f"EPUB/{cover_href}"
+    check(bool(cover_href) and cover_path in names, "封面文件存在于 EPUB")
+    if cover_href and cover_path in names:
+        head = archive.read(cover_path)[:8]
+        check(
+            head.startswith(b"\x89PNG\r\n\x1a\n")
+            or head.startswith(b"\xff\xd8\xff")
+            or head.startswith(b"GIF8"),
+            "封面文件是有效位图",
+        )
+
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
 check("illustrations/front.svg" in readme, "README 引用卷首插画")
 path_section = readme.split("## 学习路径", 1)[1].split("## ", 1)[0]

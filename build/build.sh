@@ -34,15 +34,32 @@ fi
 [ -n "${CHROME_PATH:-}" ] || { echo "未找到 Chrome/Edge" >&2; exit 1; }
 export CHROME_PATH
 
+SANDBOX_FLAGS=()
+if [ -n "${CI:-}" ]; then SANDBOX_FLAGS+=(--no-sandbox); fi
+
 # ---- Mermaid 预渲染：源文件保留可编辑代码，pandoc 只消费 build/tmp/src 副本 ----
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 NATIVE="$ROOT"
 if command -v cygpath >/dev/null 2>&1; then NATIVE="$(cygpath -m "$ROOT")"; fi
+case "$NATIVE" in
+  /*) URI_ROOT="file://$NATIVE" ;;
+  *)  URI_ROOT="file:///$NATIVE" ;;
+esac
 
 # ---- 章插图：源文件在 illustrations/，先生成再复制到 figures/ 供 pandoc 解析 ----
 python3 "$NATIVE/build/draw_illustrations.py"
 mkdir -p "$NATIVE/build/tmp/figures"
 cp "$NATIVE"/illustrations/*.svg "$NATIVE/build/tmp/figures/"
+
+# ---- EPUB 封面：--epub-cover-image 只收位图，用 Chrome 把卷首 SVG 栅格化为 2x PNG ----
+cat > "$NATIVE/build/tmp/cover.html" <<'HTML'
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#f6f1e6}img{display:block;width:100%;height:auto}</style></head><body><img src="figures/front.svg" alt="cover"></body></html>
+HTML
+COVER="$NATIVE/build/tmp/cover.png"
+"$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --hide-scrollbars \
+  --force-device-scale-factor=2 --window-size=800,420 \
+  --screenshot="$COVER" "$URI_ROOT/build/tmp/cover.html" >/dev/null 2>&1
+[ -s "$COVER" ] || { echo "封面栅格化失败: $COVER" >&2; exit 1; }
 python3 "$NATIVE/build/render_mermaid.py" \
   --out "$NATIVE/build/tmp/src" --figures "$NATIVE/build/tmp/figures" "${SRC[@]}"
 for i in "${!SRC[@]}"; do SRC[$i]="build/tmp/src/$(basename "${SRC[$i]}")"; done
@@ -55,6 +72,7 @@ pandoc "${SRC[@]}" \
   --split-level=1 \
   --css=build/style.css \
   --epub-title-page=true \
+  --epub-cover-image="$COVER" \
   -o "$OUT/chaizha.epub"
 
 # ---- HTML -> PDF（Chrome headless）----
@@ -67,12 +85,7 @@ pandoc "${SRC[@]}" \
   --css=build/style.css \
   -o build/tmp/book.html
 
-case "$NATIVE" in
-  /*) HTML_URI="file://$NATIVE/build/tmp/book.html" ;;
-  *)  HTML_URI="file:///$NATIVE/build/tmp/book.html" ;;
-esac
-SANDBOX_FLAGS=()
-if [ -n "${CI:-}" ]; then SANDBOX_FLAGS+=(--no-sandbox); fi
+HTML_URI="$URI_ROOT/build/tmp/book.html"
 "$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --no-pdf-header-footer \
   --print-to-pdf="$NATIVE/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
 
