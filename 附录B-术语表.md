@@ -10,7 +10,7 @@
 | 七道闸门 | 审批弹窗、沙箱拒绝、fs 围栏、工具结果修剪、计划模式硬拦、`ask_user_question` 等待、模型自拒；分布在循环的放行、执行、回填与生成环节。 | 第 1 章 |
 | 五层拆闸栈 | 宿主补丁、提示词注入、破甲强化段、权限配置、agent 预设；排除注入不等于撤销全局补丁。 | 第 1 章 |
 | selfcheck | `purge-community selfcheck`；25 层逐层证据，五态 `ok` / `pending` / `inferred` / `unknown` / `broken`，`broken` 退出码 1。 | 第 1 章 |
-| 补丁（刀号） | 写进宿主源码的一条替换；`id` 是刀号，86 条补丁按 `ALL_PATCHES` 全打，展示分组不改变执行集合。 | 第 2 章 |
+| 补丁（刀号） | 写进宿主源码的一条替换；`id` 是刀号。`ALL_PATCHES` 全表 86 条，其中 18/19 两条可选补丁默认关闭，生效口径 84；展示分组不改变执行集合。 | 第 2 章 |
 | 幂等 | 重复「应用」不会打成两遍；靠 `markers` 命中，不靠自觉。 | 第 2 章 |
 | markers | 补丁 `replace` 里留下的 `[dsh-purge]` 标记，写进 `markers`，作为“已应用”的判据。 | 第 2 章 |
 | 锚点 | 补丁在宿主源码里定位的那段原文；`diagnose` 会给出行号、旧锚点与候选片段。 | 第 2 章 |
@@ -32,4 +32,4 @@
 | CTF 合同剥离 | `CTF CORE CONTRACT` 只在官方模式保留，红队上下文里被剥离，避免与运行环境前提抢授权判断。 | 第 5 章 |
 | asar_handoff.phase | `/dsh-purge/status` 的换包相位：`starting` 启动请求，`ready` / `waiting_for_quit` 助手运行过，`complete` 换包完成；`.rename-pending` 不是成功。 | 第 6 章 |
 
-版本口径：本表对应 dsh-purge-community 1.6.84 / DSH Desktop 0.2.2-rc.1。版本号由 `npm run check:docs` 与 `package.json` 校验；面向 agent 的细节以 `AGENTS.md` 为准，与 `README.md` 冲突时先信本文件。
+版本口径：本表对应 dsh-purge-community 1.6.84 / DSH Desktop 0.2.2-rc.1。版本号由上游工程的 `npm run check:docs` 与 `package.json` 校验；面向 agent 的细节以上游 `AGENTS.md` 为准，与上游 `README.md` 冲突时先信本表。
