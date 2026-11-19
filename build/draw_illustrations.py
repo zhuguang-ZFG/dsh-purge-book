@@ -191,7 +191,8 @@ def points_to_d(points, closed):
     for point in points:
         if last is not None and math.dist(point, last) < 0.01:
             continue
-        out.append(("M" if last is None else "L") + f" {fmt(point[0])} {fmt(point[1])}")
+        # SVG interprets coordinate pairs after moveto as implicit lineto commands.
+        out.append(("M " if last is None else "") + f"{fmt(point[0])} {fmt(point[1])}")
         last = point
     if closed:
         out.append("Z")
