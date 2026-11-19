@@ -66,15 +66,27 @@ def ch01() -> str:
 
 def ch02() -> str:
     parts = []
+    # 左栏：86 条补丁的定位网格，其中一格标为漂移锚点
     for i in range(86):
-        row, col = divmod(i, 11)
-        x, y = 64 + col * 68, 90 + row * 32
-        parts.append(f'<rect x="{x}" y="{y}" width="46" height="18" fill="{INK if i % 7 else "none"}"/>')
-    parts += [f'<rect x="64" y="90" width="46" height="18" fill="none" stroke="{ACCENT}" stroke-width="3"/>',
-              '<path d="M620 84 L690 320" stroke="white" stroke-width="8"/>',
-              '<path d="M620 84 L690 320" stroke="currentColor" stroke-width="2"/>',
-              label(64, 390, "86 PATCHES  /  ONE ANCHOR SHIFT", 18)]
-    return frame("".join(parts), "chap02 eighty six patches")
+        row, col = divmod(i, 8)
+        x, y = 54 + col * 44, 78 + row * 24
+        fill = ACCENT if i == 42 else (INK if i % 7 else "none")
+        parts.append(f'<rect x="{x}" y="{y}" width="30" height="14" fill="{fill}"/>')
+    # 右栏：漂移 -> 诊断候选 -> 重锚 -> 验证
+    parts += ['<path d="M440 60 L440 360" stroke-dasharray="6 8"/>',
+              label(470, 92, "DRIFT", 18, ACCENT),
+              '<path d="M470 108 L556 108" stroke-dasharray="4 6"/>',
+              '<path d="M548 102 l10 6 -10 6 Z"/>',
+              '<circle cx="620" cy="180" r="52"/>',
+              '<path d="M656 216 L700 260"/>',
+              label(588, 186, "ANCHOR", 14),
+              '<rect x="470" y="270" width="230" height="50"/>',
+              label(486, 300, "REANCHOR", 18),
+              '<path d="M585 232 L585 270" stroke-dasharray="4 6"/>',
+              label(470, 352, "VERIFY", 18),
+              '<path d="M540 340 l14 14 30 -34"/>',
+              label(54, 390, "86 PATCHES / DIAGNOSE -> REANCHOR", 18)]
+    return frame("".join(parts), "chap02 drift diagnosis and reanchor")
 
 
 def ch03() -> str:
