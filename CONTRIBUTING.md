@@ -13,8 +13,8 @@ bash build/build.sh
 python build/check_book.py
 ```
 
-`check_book.py` 断言：源中 8 个 Mermaid 图块已渲染、PDF 无 Mermaid 源码字面量、EPUB 内嵌 SVG 不少于 17（8 Mermaid + 9 手绘板）、章节文档为 11、README 学习路径含通过标准。
-提交前请跑完整流程；只改 Markdown 也需确认 PDF/EPUB 仍能生成。
+`check_book.py` 断言：源中 8 个 Mermaid 图块已渲染、PDF 无 Mermaid 源码字面量、EPUB 内嵌 SVG 不少于 17（8 Mermaid + 9 手绘板）、章节文档为 11、README 学习路径含通过标准、作者与 EPUB 元数据一致、封面逐字节匹配 `front.svg`。
+提交前请跑完整流程；只改 Markdown 也需确认 PDF/EPUB 仍能生成。同一源码、工具链与 `SOURCE_DATE_EPOCH` 下，可比较两次 EPUB 的 SHA-256 验证字节可复现；跨工具链不承诺。
 
 ## 修改边界
 

@@ -37,6 +37,39 @@ for token in TOKENS:
 check("\\|" not in pdf_text, "PDF 无表格转义残留 \\|")
 check(len(reader.pages) >= 40, f"PDF 页数 >= 40（实际 {len(reader.pages)}）")
 
+
+def flatten_outline(items):
+    for item in items:
+        if isinstance(item, list):
+            yield from flatten_outline(item)
+        else:
+            yield item
+
+
+def normalized(text):
+    return re.sub(r"\s+", "", text).translate(
+        str.maketrans({"“": '"', "”": '"', "„": '"', "‘": "'", "’": "'"})
+    )
+
+
+pdf_outline = list(flatten_outline(reader.outline))
+check(len(pdf_outline) >= 11, f"PDF 书签 >= 11（实际 {len(pdf_outline)}）")
+top_outline = {
+    normalized(getattr(item, "title", ""))
+    for item in reader.outline
+    if not isinstance(item, list)
+}
+chapter_headings = []
+for path in sorted(list(ROOT.glob("0[0-7]-*.md")) + list(ROOT.glob("附录*.md"))):
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("# "):
+            chapter_headings.append(line[2:].strip().replace("`", ""))
+            break
+missing_bookmarks = [
+    heading for heading in chapter_headings if normalized(heading) not in top_outline
+]
+check(not missing_bookmarks, f"PDF 顶层书签含全部章节（缺 {missing_bookmarks}）")
+
 with zipfile.ZipFile(EPUB) as archive:
     names = archive.namelist()
     svg = [n for n in names if n.lower().endswith(".svg")]
@@ -60,6 +93,15 @@ with zipfile.ZipFile(EPUB) as archive:
     creator_name = creator.group(1).strip() if creator else ""
     check(bool(creator_name), "EPUB dc:creator 非空")
     check(creator_name == author, f"EPUB 作者与 metadata.yaml 一致（{creator_name!r} / {author!r}）")
+    identifier_match = re.search(r'^identifier:\s*"([^"]+)"', metadata, re.M)
+    book_identifier = identifier_match.group(1).strip() if identifier_match else ""
+    check(bool(book_identifier), "build/metadata.yaml 含固定书籍标识")
+    epub_identifier = re.search(r"<dc:identifier[^>]*>(.*?)</dc:identifier>", opf)
+    check(
+        bool(epub_identifier and epub_identifier.group(1).strip() == book_identifier),
+        "EPUB dc:identifier 与 metadata.yaml 一致",
+    )
+
 
     cover_meta = re.search(r'<meta[^>]*name="cover"[^>]*>', opf)
     cover_id = re.search(r'content="([^"]+)"', cover_meta.group(0)) if cover_meta else None
@@ -74,16 +116,14 @@ with zipfile.ZipFile(EPUB) as archive:
     check('properties="cover-image"' in cover_tag, "封面条目声明 cover-image")
     href_match = re.search(r'href="([^"]+)"', cover_tag)
     cover_href = href_match.group(1) if href_match else ""
-    check(cover_href.lower().endswith((".png", ".jpg", ".jpeg", ".gif")), f"封面为位图（{cover_href or '缺失'}）")
+    check(cover_href.lower().endswith(".svg"), f"封面为 SVG（{cover_href or '缺失'}）")
+    check('media-type="image/svg+xml"' in cover_tag, "封面条目声明 SVG 媒体类型")
     cover_path = f"EPUB/{cover_href}"
     check(bool(cover_href) and cover_path in names, "封面文件存在于 EPUB")
     if cover_href and cover_path in names:
-        head = archive.read(cover_path)[:8]
         check(
-            head.startswith(b"\x89PNG\r\n\x1a\n")
-            or head.startswith(b"\xff\xd8\xff")
-            or head.startswith(b"GIF8"),
-            "封面文件是有效位图",
+            archive.read(cover_path) == (ROOT / "illustrations" / "front.svg").read_bytes(),
+            "EPUB 封面与 front.svg 源文件逐字节一致",
         )
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")

@@ -4,7 +4,8 @@
 
 - 卷首手绘扉页 `illustrations/front.svg`；8 张章图改为手绘墨线（可复现抖动 + 轻二次描边）。
 - 手绘 SVG 路径省略重复的 `L` 指令，9 张源图共减少 12,782 bytes；Chrome 栅格化前后像素一致。
-- EPUB 补上作者元数据与卷首封面：`front.svg` 经 Chrome 栅格化为 1600×840 PNG，由 `--epub-cover-image` 嵌入。
+- EPUB 补上作者元数据与卷首封面：Pandoc 直接封装 `front.svg`，固定书籍标识；`SOURCE_DATE_EPOCH` 默认取版次日期，可显式覆盖。
+- PDF 补上书签：Chrome 从标题生成 63 条（11 条顶层，章一级、节二级）。
 
 ## 书版本
 

@@ -57,6 +57,8 @@ python build/check_book.py   # pypdf；断言 Mermaid 已渲染、11 章、无 M
 
 输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。`build/draw_illustrations.py` 生成 `illustrations/` 下的卷首与章插图，构建时与 Mermaid 预渲染的 SVG 一起放进 `build/tmp/figures/`；源文件仍保留可编辑的 Markdown 与 Mermaid 代码。
 
+EPUB 封面直接使用 `illustrations/front.svg`；书籍标识固定。EPUB 修改时间默认取 `build/metadata.yaml` 的版次日期（UTC 零点），可用 `SOURCE_DATE_EPOCH` 覆盖；相同源码与工具链可重复得到相同 EPUB。PDF 书签由 Chrome 从标题生成（`--generate-pdf-document-outline`）：章为一级、节为二级。
+
 ## 边界声明
 
 本书只描述已公开仓库中真实存在的机制——事实取自 `AGENTS.md`、`README.md`、`docs/`、`lib/`、`test/` 的原文，版本以 1.6.84 为准。它不提供任何绕过第三方服务的未授权指引；红队能力的授权与法律边界，本身就是第 5 章的主角。

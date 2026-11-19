@@ -6,6 +6,21 @@ cd "$(dirname "$0")/.."
 OUT=dist
 mkdir -p "$OUT" build/tmp
 
+# Pandoc 的 EPUB 时间戳取版次日期（UTC 零点）；调用者可显式覆盖。
+if [ -z "${SOURCE_DATE_EPOCH:-}" ]; then
+  SOURCE_DATE_EPOCH="$(python3 - <<'PY'
+from datetime import datetime, timezone
+from pathlib import Path
+import re
+
+metadata = Path("build/metadata.yaml").read_text(encoding="utf-8")
+date = re.search(r'^date:\s*"([^"]+)"', metadata, re.M).group(1)
+print(int(datetime.strptime(date, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp()))
+PY
+)"
+fi
+export SOURCE_DATE_EPOCH
+
 # 前言 = README 去掉：重复书名标题、文件清单表、「构建 PDF / EPUB」小节、配图说明与配图方案引用
 awk '
   /^# 拆闸/ { if (!seen1) { seen1 = 1; next } }
@@ -51,15 +66,8 @@ python3 "$NATIVE/build/draw_illustrations.py"
 mkdir -p "$NATIVE/build/tmp/figures"
 cp "$NATIVE"/illustrations/*.svg "$NATIVE/build/tmp/figures/"
 
-# ---- EPUB 封面：--epub-cover-image 只收位图，用 Chrome 把卷首 SVG 栅格化为 2x PNG ----
-cat > "$NATIVE/build/tmp/cover.html" <<'HTML'
-<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#f6f1e6}img{display:block;width:100%;height:auto}</style></head><body><img src="figures/front.svg" alt="cover"></body></html>
-HTML
-COVER="$NATIVE/build/tmp/cover.png"
-"$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --hide-scrollbars \
-  --force-device-scale-factor=2 --window-size=800,420 \
-  --screenshot="$COVER" "$URI_ROOT/build/tmp/cover.html" >/dev/null 2>&1
-[ -s "$COVER" ] || { echo "封面栅格化失败: $COVER" >&2; exit 1; }
+# EPUB 直接封装 SVG 源文件，避免封面文字随构建机字体栅格变化。
+COVER="$NATIVE/illustrations/front.svg"
 python3 "$NATIVE/build/render_mermaid.py" \
   --out "$NATIVE/build/tmp/src" --figures "$NATIVE/build/tmp/figures" "${SRC[@]}"
 for i in "${!SRC[@]}"; do SRC[$i]="build/tmp/src/$(basename "${SRC[$i]}")"; done
@@ -87,6 +95,7 @@ pandoc "${SRC[@]}" \
 
 HTML_URI="$URI_ROOT/build/tmp/book.html"
 "$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --no-pdf-header-footer \
+  --generate-pdf-document-outline \
   --print-to-pdf="$NATIVE/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
 
 ls -la "$OUT"
