@@ -66,6 +66,8 @@ def main():
             return f"![图示 {stem}]({svg.name})"
 
         result = BLOCK.sub(render, source.read_text(encoding="utf-8"))
+        # 插图源文件在仓库根目录；复制到 figures 后按文件名引用，源文件仍可被 GitHub 预览
+        result = re.sub(r"\]\(illustrations/", "](", result)
         (out / source.name).write_text(result, encoding="utf-8")
         print(f"{source.name}: {counter} 图")
 

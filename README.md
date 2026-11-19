@@ -7,7 +7,7 @@
 - **证据基线**：dsh-purge-community **1.6.84**（`YuJunZhiXue/dsh-purge` 的社区分支）
 - **宿主版本**：DSH Desktop **0.2.2-rc.1**（0.2.1-rc.1 / rc.2 / rc.3 / rc.5 同样通过验收）
 - **体例**：开门一句话、学习目标、难度定位（含前置）、章末动手、章末指路；每章一个可以抄走的表或图
-- **配图**：`配图方案.md` 按手绘风格库给出每章插图的双语生图提示词（贯穿全篇：FA-029 几何图解叙事（Chris Ware）× C-03 普鲁士蓝）
+- **配图**：每章一张随书构建的几何插画（`illustrations/ch00.svg`–`ch07.svg`，FA-029 几何图解叙事（Chris Ware）× C-03 普鲁士蓝）；`配图方案.md` 另附双语生图提示词
 
 ## 目录
 
@@ -48,10 +48,10 @@
 # 依赖：pandoc + Chrome（或 Edge）+ bun；在 Git Bash 中运行
 (cd build && PUPPETEER_SKIP_DOWNLOAD=1 bun install --frozen-lockfile)
 bash build/build.sh
-python build/check_book.py   # pypdf；断言 8 图已渲染、11 章、无 Mermaid 源码残留
+python build/check_book.py   # pypdf；断言 Mermaid 已渲染、11 章、无 Mermaid 源码残留
 ```
 
-输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。Mermaid 图在 `build/tmp/figures/` 预渲染为 SVG，源文件仍保留可编辑的 Mermaid 代码。
+输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。`build/draw_illustrations.py` 生成 `illustrations/` 下的章插图，构建时与 Mermaid 预渲染的 SVG 一起放进 `build/tmp/figures/`；源文件仍保留可编辑的 Markdown 与 Mermaid 代码。
 
 ## 边界声明
 

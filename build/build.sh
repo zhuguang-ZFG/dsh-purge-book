@@ -38,6 +38,11 @@ export CHROME_PATH
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 NATIVE="$ROOT"
 if command -v cygpath >/dev/null 2>&1; then NATIVE="$(cygpath -m "$ROOT")"; fi
+
+# ---- 章插图：源文件在 illustrations/，先生成再复制到 figures/ 供 pandoc 解析 ----
+python3 "$NATIVE/build/draw_illustrations.py"
+mkdir -p "$NATIVE/build/tmp/figures"
+cp "$NATIVE"/illustrations/*.svg "$NATIVE/build/tmp/figures/"
 python3 "$NATIVE/build/render_mermaid.py" \
   --out "$NATIVE/build/tmp/src" --figures "$NATIVE/build/tmp/figures" "${SRC[@]}"
 for i in "${!SRC[@]}"; do SRC[$i]="build/tmp/src/$(basename "${SRC[$i]}")"; done
