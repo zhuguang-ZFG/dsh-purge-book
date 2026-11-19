@@ -22,9 +22,30 @@ awk '
 
 SRC=(build/tmp/preface.md 00-序章-从一个我不能说起.md 01-七道闸门.md 02-八十六刀.md 03-组装权之战.md 04-证据账本.md 05-红队指挥官.md 06-造车记.md 07-结语.md 附录A-命令速查.md 附录B-术语表.md)
 
+# ---- Chrome 定位（Windows / Linux 通用）----
+if [ -z "${CHROME_PATH:-}" ]; then
+  for candidate in \
+    "C:/Program Files/Google/Chrome/Application/chrome.exe" \
+    "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" \
+    /usr/bin/google-chrome /usr/bin/chromium /usr/bin/chromium-browser; do
+    if [ -x "$candidate" ]; then CHROME_PATH="$candidate"; break; fi
+  done
+fi
+[ -n "${CHROME_PATH:-}" ] || { echo "未找到 Chrome/Edge" >&2; exit 1; }
+export CHROME_PATH
+
+# ---- Mermaid 预渲染：源文件保留可编辑代码，pandoc 只消费 build/tmp/src 副本 ----
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+NATIVE="$ROOT"
+if command -v cygpath >/dev/null 2>&1; then NATIVE="$(cygpath -m "$ROOT")"; fi
+python3 "$NATIVE/build/render_mermaid.py" \
+  --out "$NATIVE/build/tmp/src" --figures "$NATIVE/build/tmp/figures" "${SRC[@]}"
+for i in "${!SRC[@]}"; do SRC[$i]="build/tmp/src/$(basename "${SRC[$i]}")"; done
+
 # ---- EPUB ----
 pandoc "${SRC[@]}" \
   --metadata-file=build/metadata.yaml \
+  --resource-path=build/tmp/figures \
   --toc --toc-depth=2 \
   --split-level=1 \
   --css=build/style.css \
@@ -34,17 +55,18 @@ pandoc "${SRC[@]}" \
 # ---- HTML -> PDF（Chrome headless）----
 pandoc "${SRC[@]}" \
   --metadata-file=build/metadata.yaml \
+  --resource-path=build/tmp/figures \
   --toc --toc-depth=2 \
   --standalone \
   --embed-resources \
   --css=build/style.css \
   -o build/tmp/book.html
 
-CHROME="C:/Program Files/Google/Chrome/Application/chrome.exe"
-[ -x "$CHROME" ] || CHROME="C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
-
-HTML_URI="file:///$(pwd -W | sed 's|^/||')/build/tmp/book.html"
-"$CHROME" --headless --disable-gpu --no-pdf-header-footer \
-  --print-to-pdf="$(pwd -W)/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
+case "$NATIVE" in
+  /*) HTML_URI="file://$NATIVE/build/tmp/book.html" ;;
+  *)  HTML_URI="file:///$NATIVE/build/tmp/book.html" ;;
+esac
+"$CHROME_PATH" --headless --disable-gpu --no-pdf-header-footer \
+  --print-to-pdf="$NATIVE/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
 
 ls -la "$OUT"

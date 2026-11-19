@@ -33,16 +33,25 @@
 | 精通 | 第 3、5 章 | 接管最深的机关：提示词组装权（谁排最前，谁就是人格）与红队合同（指挥稿、CTF 剥离、授权边界） |
 | 贯通 | 第 6–7 章 + 附录 | 把拆闸经验还给工程：Windows 验收、文档即契约；命令速查与术语表随手翻 |
 
-只想看故事：第 0、6、7 章，一杯咖啡的量。想给文章配图：直接翻 `配图方案.md`，提示词可复制进任意生图工具。每章开头都标了难度定位，按上面的顺序读，难度是缓坡。
+**通过标准**（自测；每项都能对着书里的命令或表格核出来才算过关）：
+
+- 入门：跑通 §1.5 的安装与首次自检；能在五层拆闸栈上指出七道闸门各自拦在哪一步。
+- 进阶：从 `selfcheck --json` 挑出 25 层里非 `ok` 的层，说清 `pending` 与 `broken` 的判读差别；能用 `probe new` 的 nonce 回声证明注入到了模型眼前。
+- 精通：说清 `assembleGuard` 与 `GLOBAL_PROMPT_ORDER` 如何抢到提示词队首；复述红队指挥稿「只派活、自己不动手」的两处文本边界与授权前提。
+- 贯通：拿自己的一个自动化脚本，按第 6.2 节七条逐项给出安装验收证据，而不只是退出码。
+
+只想看故事：第 0、6、7 章，一杯咖啡的量。
 
 ## 构建 PDF / EPUB
 
 ```bash
-# 依赖：pandoc + Chrome（或 Edge）；在 Git Bash 中运行
+# 依赖：pandoc + Chrome（或 Edge）+ bun；在 Git Bash 中运行
+(cd build && PUPPETEER_SKIP_DOWNLOAD=1 bun install --frozen-lockfile)
 bash build/build.sh
+python build/check_book.py   # pypdf；断言 8 图已渲染、11 章、无 Mermaid 源码残留
 ```
 
-输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。
+输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。Mermaid 图在 `build/tmp/figures/` 预渲染为 SVG，源文件仍保留可编辑的 Mermaid 代码。
 
 ## 边界声明
 
