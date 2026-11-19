@@ -42,14 +42,18 @@ def main():
             mmd = figures / f"{stem}.mmd"
             svg = figures / f"{stem}.svg"
             mmd.write_text(match.group(1), encoding="utf-8")
-            subprocess.run(
+            result = subprocess.run(
                 ["bun", "x", "mmdc", "-i", str(mmd), "-o", str(svg), "-b", "transparent"],
                 cwd=BUILD,
                 env=env,
-                check=True,
                 capture_output=True,
                 text=True,
             )
+            if result.returncode != 0:
+                raise RuntimeError(
+                    f"mmdc 渲染失败 {stem} (exit {result.returncode}):\n"
+                    f"{result.stderr}\n{result.stdout}"
+                )
             if not svg.exists() or svg.stat().st_size == 0:
                 raise RuntimeError(f"SVG 未生成: {svg}")
             # pandoc 通过 --resource-path 指向 figures 目录，引用写成文件名即可
