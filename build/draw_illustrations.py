@@ -118,7 +118,8 @@ def ch04() -> str:
             parts.append(f'<path d="M{x} {y} L{x} {y+56}"/>')
     parts += [label(84, 132, "OK", 16), label(294, 244, "PENDING", 16, ACCENT),
               label(510, 300, "OK", 16), '<circle cx="400" cy="205" r="62"/>',
-              '<path d="M444 250 L500 306"/>', label(340, 390, "EVIDENCE LEDGER", 20)]
+              label(366, 212, "NONCE", 16), '<path d="M444 250 L500 306"/>',
+              label(300, 390, "SELFCHECK / PROBE / EVIDENCE LEDGER", 18)]
     return frame("".join(parts), "chap04 evidence ledger")
 
 
