@@ -6,7 +6,7 @@
 
 | 命令 | 作用 | 退出码 |
 | --- | --- | --- |
-| `purge-community status` | 宿主路径、补丁计数 | 0 |
+| `purge-community status` | 兼容级别、宿主选择与备份列表（补丁计数看 `selfcheck`） | 0 |
 | `purge-community selfcheck [--json / --text]` | 25 层逐层证据 | **broken → 1**；其余 → 0（含 pending / inferred / unknown） |
 | `purge-community host-status` | 只读磁盘布局与当前服务入口证据，不退出/换包/重启 | 0，须检查 state |
 | `purge-community diagnose [--json]` | 锚点漂移诊断（含行号 + 片段） | 0 |
@@ -61,4 +61,4 @@
 
 ## A.4 备用命令名（§16）
 
-同名命令由原插件保留。Purge 备用命令依次为 `/purge-community`、`/purge-rules`、`/purge-skills`、`/purge-rewind`；`status.commands` 可查看实际注册名称。备用名称也占用时**只跳过该命令并报警，不覆盖他人命令**，不影响其他命令、工具、提示词与 HTTP 接口。不要为恢复面板卸载用户的回退插件。
+同名命令由原插件保留。Purge 备用命令依次为 `/purge-community`、`/purge-rules`、`/purge-skills`、`/purge-rewind`；面板 `/dsh-purge/status` 返回的 `commands` 可查看实际注册名称。备用名称也占用时**只跳过该命令并报警，不覆盖他人命令**，不影响其他命令、工具、提示词与 HTTP 接口。不要为恢复面板卸载用户的回退插件。
