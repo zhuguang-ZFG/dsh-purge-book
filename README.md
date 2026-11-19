@@ -35,6 +35,15 @@
 
 只想看故事：第 0、6、7 章，一杯咖啡的量。想给文章配图：直接翻 `配图方案.md`，提示词可复制进任意生图工具。每章开头都标了难度定位，按上面的顺序读，难度是缓坡。
 
+## 构建 PDF / EPUB
+
+```bash
+# 依赖：pandoc + Chrome（或 Edge）；在 Git Bash 中运行
+bash build/build.sh
+```
+
+输出 `dist/chaizha.epub`（pandoc 直接生成）与 `dist/chaizha.pdf`（pandoc 先产出单文件 HTML，再由 Chrome headless 打印，无需 LaTeX）。正文只收录 00–07 章与附录 A/B；前言由本 README 自动裁剪生成（去掉文件清单与配图说明）。
+
 ## 边界声明
 
 本书只描述已公开仓库中真实存在的机制——事实取自 `AGENTS.md`、`README.md`、`docs/`、`lib/`、`test/` 的原文，版本以 1.6.84 为准。它不提供任何绕过第三方服务的未授权指引；红队能力的授权与法律边界，本身就是第 5 章的主角。

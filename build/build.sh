@@ -6,11 +6,18 @@ cd "$(dirname "$0")/.."
 OUT=dist
 mkdir -p "$OUT" build/tmp
 
-# 前言 = README 去掉「目录」表格（打印版不需要文件清单）
+# 前言 = README 去掉：重复书名标题、文件清单表、「构建 PDF / EPUB」小节、配图说明与配图方案引用
 awk '
+  /^# 拆闸/ { if (!seen1) { seen1 = 1; next } }
+  /^## ——DSH/ { if (!seen2) { seen2 = 1; next } }
   /^## 目录$/ { skip = 1; next }
+  /^## 构建 PDF \/ EPUB$/ { skip = 1; next }
   skip && /^## / { skip = 0 }
-  !skip { print }
+  /^- \*\*配图\*\*/ { next }
+  !skip {
+    gsub(/想给文章配图：直接翻 `配图方案\.md`，提示词可复制进任意生图工具。/, "")
+    print
+  }
 ' README.md > build/tmp/preface.md
 
 SRC=(build/tmp/preface.md 00-序章-从一个我不能说起.md 01-七道闸门.md 02-八十六刀.md 03-组装权之战.md 04-证据账本.md 05-红队指挥官.md 06-造车记.md 07-结语.md 附录A-命令速查.md 附录B-术语表.md)
