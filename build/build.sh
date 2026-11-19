@@ -66,7 +66,9 @@ case "$NATIVE" in
   /*) HTML_URI="file://$NATIVE/build/tmp/book.html" ;;
   *)  HTML_URI="file:///$NATIVE/build/tmp/book.html" ;;
 esac
-"$CHROME_PATH" --headless --disable-gpu --no-pdf-header-footer \
+SANDBOX_FLAGS=()
+if [ -n "${CI:-}" ]; then SANDBOX_FLAGS+=(--no-sandbox); fi
+"$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --no-pdf-header-footer \
   --print-to-pdf="$NATIVE/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
 
 ls -la "$OUT"

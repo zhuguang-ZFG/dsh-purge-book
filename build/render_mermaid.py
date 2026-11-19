@@ -28,6 +28,12 @@ def main():
 
     env = os.environ.copy()
     env["PUPPETEER_EXECUTABLE_PATH"] = env.get("CHROME_PATH", env.get("PUPPETEER_EXECUTABLE_PATH", ""))
+    # CI 上 Chromium 受 AppArmor 限制无法建沙箱；仅 CI 传 --no-sandbox
+    mmdc_extra = []
+    if env.get("CI"):
+        puppeteer_config = figures / "puppeteer.json"
+        puppeteer_config.write_text('{"args": ["--no-sandbox"]}', encoding="utf-8")
+        mmdc_extra = ["-p", str(puppeteer_config)]
     total = 0
 
     for name in args.files:
@@ -43,7 +49,7 @@ def main():
             svg = figures / f"{stem}.svg"
             mmd.write_text(match.group(1), encoding="utf-8")
             result = subprocess.run(
-                ["bun", "x", "mmdc", "-i", str(mmd), "-o", str(svg), "-b", "transparent"],
+                ["bun", "x", "mmdc", "-i", str(mmd), "-o", str(svg), "-b", "transparent", *mmdc_extra],
                 cwd=BUILD,
                 env=env,
                 capture_output=True,
