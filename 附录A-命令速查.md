@@ -7,15 +7,17 @@
 | 命令 | 作用 | 退出码 |
 | --- | --- | --- |
 | `purge-community status` | 宿主路径、补丁计数 | 0 |
-| `purge-community selfcheck [--json\|--text]` | 25 层逐层证据 | **broken → 1**，pending/ok → 0 |
+| `purge-community selfcheck [--json / --text]` | 25 层逐层证据 | **broken → 1**，pending/ok → 0 |
 | `purge-community host-status` | 只读磁盘布局与当前服务入口证据，不退出/换包/重启 | 0，须检查 state |
 | `purge-community diagnose [--json]` | 锚点漂移诊断（含行号 + 片段） | 0 |
-| `purge-community reanchor list\|show\|apply <id> [--index n] [--lines a-b] [--yes]\|clear <id>` | 半自动重锚：把新锚点钉成本地覆盖 | 0 |
+| `purge-community reanchor list` / `show <id>` | 查看已有覆盖与单条详情 | 0 |
+| `purge-community reanchor apply <id> [--index n] [--lines a-b] [--yes]` | 半自动重锚：先 dry-run 看候选，确认后写入 | 0 |
+| `purge-community reanchor clear <id>` | 撤销覆盖，恢复出厂锚点 | 0 |
 | `purge-community probe [new]` | 生成/查看运行时探针 | 0 |
 | `purge-community audit [--limit n]` | 最近动作记录（apply/revert/boost/probe/preset/reanchor/refusal_retry） | 0 |
-| `purge-community boost [on\|off]` | 尾部强化段开关 | 0 |
-| `purge-community preset [status\|install [--force]]` | `unrestricted` 预设落盘 | 0 |
-| `purge-community retry [on\|off]` | 拒绝检测后的单次重试开关（默认 off，存 `tuning.json` 的 `refusalRetry`） | 0 |
+| `purge-community boost [on / off]` | 尾部强化段开关 | 0 |
+| `purge-community preset [status / install [--force]]` | `unrestricted` 预设落盘 | 0 |
+| `purge-community retry [on / off]` | 拒绝检测后的单次重试开关（默认 off，存 `tuning.json` 的 `refusalRetry`） | 0 |
 | `purge-community usage` / `prune` | 备份占用 / 清理+GC | 0 |
 | `purge-community backup` / `rollback <id>` | 快照 / 回滚插件 | 0 |
 | `purge-community apply` / `revert` / `uninstall` / `edit` | 原版能力（转发 `dsh-purge`） | 透传 |
