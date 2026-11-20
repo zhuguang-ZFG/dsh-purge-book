@@ -37,12 +37,12 @@ GitHub 视觉参考优化：核对 Rough.js、perfect-freehand 与 Excalidraw �
 | Git 提交 | cc881fbd68b891772330c6b0d275b0c971794e00 | 25 个关键文件的规范化 SHA-256 记录在 build/baseline.json |
 | 迁移案例 | zhuguang-ZFG/pi-purge，5cd5f3551fba1c7320751b825e9167da5af6c25e | 28 个文件摘要在 build/baseline-pi.json；独立于主基线 |
 | 插件版本 | 2.0.0 | package.json 声明值 |
-| 目标宿主 | DSH 0.2.2-rc.3 | 上游声明；本次未在真实宿主上安装或应用 |
+| 目标宿主 | DSH 0.2.2-rc.3 | 独立 npm 安装已验证写入、加载、重启、本地接口输入与恢复；常用 rc.5 桌面安装未作为测试目标 |
 | Node.js | package.json 声明 >=18 | 不据此推定全部 SQLite/FTS5 能力可用 |
 
-验证完成范围：主线 61 项、pi-purge 59 项源码与离线检查，以及 66 项成书检查、16 图浏览器验收通过。最终 PDF 为 49 页、106 个书签、68 个目录页码、103 个内部链接，25 个图区中文均不少于 8.5 磅。EPUB 含 11 个正文章节、25 个原图页、26 个 SVG 资源，EPUBCheck 5.4.0 零错误、零警告。epub.js 的 44 个章节布局、22 个字体回退场景、33 个索引入口、25 个原图往返及前后翻页通过；MuPDF 四种独立重排布局均解码全部 51 个图片出现位置，没有横向溢出。详情与 MuPDF 保留的版本诊断见 SOURCES.md。页数不作为跨工具链的固定结果。
+验证完成范围：主线 61 项、pi-purge 59 项源码与离线检查，以及 67 项成书检查、16 图浏览器验收通过。Windows PDF 为 49 页、106 个书签、68 个目录页码、103 个内部链接，25 个图区中文均不少于 8.5 磅。EPUB 含 11 个正文章节、25 个原图页、26 个 SVG 原稿及对应 PNG 兼容图，EPUBCheck 5.4.0 零错误、零警告。epub.js 与 MuPDF 的重排、链接和图片检查通过；Windows Neat Reader 9.0.11 与 SumatraPDF 3.6.1 已实测。详情见 SOURCES.md 与验收记录；页数不作为跨工具链的固定结果。
 
-未测范围：真实 DSH 安装、Apply、重启、联网演练、模型效果与拒绝率；Apple Books、微信读书、Kindle 等阅读器实机；远端 CI 本次未运行。离线检查不调用宿主补丁写盘入口，详情见 SOURCES.md。
+本轮实测补足真实 rc.3 和 Windows 阅读器记录，并将 EPUB 显示图片改为高清 PNG，保留矢量原稿；修复 CI 锁定了不存在于下载表中的 Chrome 版本。远端运行结果逐次记录，不能把失败运行写成通过。未测范围仍包括在线模型效果与拒绝率、官方桌面宿主完整流程，以及 Apple Books、微信读书、Kindle 等设备。
 
 ## 升级规则
 

@@ -8,7 +8,7 @@
 
 ## 本地构建与验收
 
-固定工具版本见 build/toolchain.json（pandoc 3.14、Chrome 157.0.8103.80、Bun 1.3.14、Python 3.13.14、Node 24.14.0）；EPUBCheck 需要 Java 17。Windows 下使用 Git Bash 运行构建脚本。
+固定 CI 工具版本见 build/toolchain.json（pandoc 3.14、Chrome for Testing 158.0.8127.36、Bun 1.3.14、Python 3.13.14、Node 24.14.0）；EPUBCheck 需要 Java 17。本轮 Windows 使用已安装的 Chrome 157.0.8103.80，实际版本单独记录；该版本不在 Chrome for Testing 下载表中。Windows 下使用 Git Bash 运行构建脚本。
 
 ```bash
 python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0
@@ -51,9 +51,16 @@ python build/check_reference.py --reference /path/to/pi-purge --baseline build/b
 - Mermaid 保留在源稿；build/tmp/ 下的构建副本不手改。
 - 翻阅索引与 PDF 书签由 build/navigation.lua 和 build/finish_pdf.py 生成；新图须收录到正文，绘制时更新 illustrations/manifest.json，并在 build/figure-notes.json 补短标题与读图说明。改标题后核对常用入口匹配及 EPUB 跨章节链接。build/print_pdf.py 反复打印至目录页码与目的地一致，不手填页码。
 - 打印和电子书分别修改 build/style.css 与 build/epub.css。EPUB 原图页由 build/finish_epub.py 封装为非线性阅读项，须同时保留返回正文入口；SVG 标签使用原生 text，不依赖 foreignObject。
+- EPUB 的显示图片由 build/rasterize_epub.mjs 从 SVG 以三倍尺寸生成无损 PNG，长边上限 4800 像素；包内同时保留 SVG 原始字节。这样处理 Neat Reader 9.0.11 把 SVG 当作 text/html 返回而破图的问题。字体会影响栅格结果，跨系统不承诺图片字节一致。
 - 改插画须改 build/draw_illustrations.py、build/detail_illustrations.py、build/migration_illustrations.py 或 build/sketchbook.py，再重建并同步 illustrations/ 与 dist/。主体笔触由锁定的 perfect-freehand 经 build/render_ink.mjs 输出；改查看器则改 build/gallery.html。运行 build/check_artwork.mjs 检查缩放、拖动、键盘和窄屏，并在 PDF 实际图幅下检查文字、箭头和排线；图注写入图片替代文本，避免另写重复说明。
 - 升级基线时同步 README.md、VERSIONS.md、SOURCES.md、build/baseline.json、受影响正文、附录和配图方案。
 - 当前 CI 检出两个固定提交，运行源码、离线实验和成书验收；工具版本固定并记录。远端 CI 是否成功须看实际运行记录。真实宿主测试必须记录版本、入口、路径、动作和结果，不能借用旧版本结论。
+
+## Windows 实际宿主与阅读器验收
+
+`build/accept_live_dsh.py` 只接收 `build/tmp/live-acceptance/` 下已准备好的独立 npm 安装；版本必须是 0.2.2-rc.3。它用官方 profile 的基础 bundle 加载固定插件，向本地 Messages 测试接口发送无害标签任务，再恢复并比较全部目标文件摘要。headless 测试明确选择 workspace-write 预设并关闭仅供 HTTP 使用的演练台桥，避免默认组合不匹配和缺少 webServer 的警告；此差异只属于测试 profile。测试接口按预设返回结果，因此只验证宿主与插件链路，不验证在线模型推理。Node 启用原生绑定，权限模型不能被当作操作系统级沙箱；常用桌面安装不用于这项测试。
+
+`build/accept_desktop_pdf.py` 在独立设置目录中运行已安装的 SumatraPDF，核对书签、原生跳转、翻页、搜索与截图。Neat Reader 使用独立用户目录启动后，以 `bun build/inspect_desktop_reader.mjs --eval-file build/desktop_epub_contract.js` 检查实际阅读窗口；代码逐页检查图片，并点击原图与返回链接。两项均只在 Windows 手动验收时运行，不作为 Linux CI 的依赖。报告和截图位于 `build/tmp/live-acceptance/`，复查时须绑定当次产物的 SHA-256。
 
 ## 风格
 

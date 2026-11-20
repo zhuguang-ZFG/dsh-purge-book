@@ -51,14 +51,14 @@ def run(label, arguments, timeout=45):
     return result.stdout
 
 
-def profile(name, bundles):
+def profile(name, bundles, patch="[]\n"):
     folder = home / "profiles" / name
     folder.mkdir(parents=True, exist_ok=True)
     manifest = {"name": "dsh-profile-" + name, "private": True, "type": "module",
                 "dependencies": {"dsh-purge-safe": "file:../../../node_modules/dsh-purge-safe"},
                 "dsh": {"profile": {"bundles": bundles}}}
     (folder / "package.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    (folder / "cordis.patch.yml").write_text("[]\n", encoding="utf-8")
+    (folder / "cordis.patch.yml").write_text(patch, encoding="utf-8")
 
 
 def web_status(label):
@@ -128,7 +128,17 @@ def main():
     for label in ("live-web-first", "live-web-restart"):
         report["stages"][label] = web_status(label)
         print(label, "ready", flush=True)
-    profile("headless", ["@deepseek-ai/dsh-base", "@deepseek-ai/dsh-headless", "dsh-purge-safe"])
+    # The headless bundle retains workspace-write while patched base defaults
+    # can infer never approval. Explicitly choose a preset for this fixture.
+    # Its HTTP-only bridge has no webServer in a headless profile.
+    profile("headless", ["@deepseek-ai/dsh-base", "@deepseek-ai/dsh-headless", "dsh-purge-safe"],
+            "- id: permission\n  config:\n    defaultPreset: workspace-write\n"
+            "- id: dsh-purge-safe-redteam-ui\n  disabled: true\n")
+    report["headless_profile_overrides"] = {"permission.defaultPreset": "workspace-write", "HTTP-only redteam UI": "disabled"}
+    previous = root / "live-task.stderr.txt"
+    preserved = root / "live-task-default.stderr.txt"
+    if previous.exists() and not preserved.exists() and "match no preset" in previous.read_text(encoding="utf-8"):
+        preserved.write_bytes(previous.read_bytes())
     fixture = ThreadingHTTPServer(("127.0.0.1", 0), Fixture)
     threading.Thread(target=fixture.serve_forever, daemon=True).start()
     env.update(DEEPSEEK_API_KEY="book-local-fixture", DEEPSEEK_BASE_URL=f"http://127.0.0.1:{fixture.server_port}")
@@ -137,6 +147,7 @@ def main():
     finally:
         fixture.shutdown()
         fixture.server_close()
+    assert "entries did not activate" not in (root / "live-task.stderr.txt").read_text(encoding="utf-8"), "Inactive headless plugin; inspect stderr"
     (root / "live-model-requests.json").write_text(json.dumps(requests, ensure_ascii=False, indent=2), encoding="utf-8")
     assert requests, "No actual provider request reached the fixture"
     wire = json.dumps(requests[0]["body"], ensure_ascii=False)

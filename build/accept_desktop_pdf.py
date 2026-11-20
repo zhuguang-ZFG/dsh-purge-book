@@ -48,6 +48,10 @@ def main():
         window.wait("exists ready", timeout=15)
         time.sleep(1)
         window.move_window(x=30, y=30, width=1100, height=900)
+        toolbar = window.child_window(class_name="ToolbarWindow32").wrapper_object()
+        fit_page = next(toolbar.get_button(i).idCommand for i in range(toolbar.button_count())
+                        if toolbar.get_button(i).text.startswith("单页视图"))
+        window.send_message(0x111, fit_page, toolbar.handle)
         tree = window.child_window(class_name="SysTreeView32", found_index=0).wrapper_object()
         reader = PdfReader(PDF)
 
@@ -77,8 +81,7 @@ def main():
         for index, target in enumerate(selections):
             item = by_title[target.title]
             # Send the native control message; no foreground mouse desktop is needed.
-            assert tree.send_message(0x110B, 9, item.elem)
-            tree.send_keystrokes("{ENTER}")
+            item.click()
             time.sleep(.35)
             page = window.descendants(class_name="Edit")[0].window_text()
             wanted = reader.get_destination_page_number(target) + 1
@@ -88,25 +91,32 @@ def main():
             capture(window.handle, OUT / "screenshots" / filename)
             report["screenshots"].append(filename)
         page_edit = window.descendants(class_name="Edit")[0]
-        page_edit.set_edit_text("1")
-        page_edit.send_keystrokes("{ENTER}")
-        window.send_keystrokes("{ESC}{RIGHT}")
+        toolbar = window.child_window(class_name="ToolbarWindow32").wrapper_object()
+        commands = {toolbar.get_button(i).text: toolbar.get_button(i).idCommand for i in range(toolbar.button_count())}
+        def command(label):
+            code = next(code for text, code in commands.items() if text.startswith(label))
+            window.send_message(0x111, code, toolbar.handle)
+        by_title[destinations[0].title].click()
+        command("下一页")
         time.sleep(.3)
         assert int(page_edit.window_text()) == 2
-        window.send_keystrokes("{LEFT}")
+        command("上一页")
         time.sleep(.3)
         assert int(page_edit.window_text()) == 1
-        window.send_keystrokes("^f")
-        search_edit = window.descendants(class_name="Edit")[1]
-        search_edit.set_edit_text("persona")
-        search_edit.send_keystrokes("{ENTER}")
-        time.sleep(.7)
-        assert int(page_edit.window_text()) > 1, "Text search did not advance"
-        report["search"] = {"term": "persona", "page": int(page_edit.window_text())}
-        window.send_keystrokes("{ESC}^+")
+        command("放大")
         time.sleep(.2)
-        capture(window.handle, OUT / "screenshots/sumatra-search-zoom.png")
+        capture(window.handle, OUT / "screenshots/sumatra-zoom.png")
         report["pagination"] = "1 -> 2 -> 1"
+        process.terminate()
+        process.wait(timeout=10)
+        # The documented reader launch option runs its own actual text search.
+        process = subprocess.Popen([str(EXE), "-appdata", str(OUT / "sumatra-profile"), "-new-window", "-search", "persona", str(PDF)])
+        time.sleep(3)
+        window = Application(backend="win32").connect(process=process.pid).window(class_name="SUMATRA_PDF_FRAME")
+        edits = window.descendants(class_name="Edit")
+        assert edits[1].window_text() == "persona" and int(edits[0].window_text()) > 1
+        report["search"] = {"term": "persona", "page": int(edits[0].window_text())}
+        capture(window.handle, OUT / "screenshots/sumatra-search.png")
         report["passed"] = True
     finally:
         (OUT / "sumatra-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -61,7 +61,7 @@ python3 "$NATIVE/build/draw_illustrations.py"
 mkdir -p "$NATIVE/build/tmp/figures"
 cp "$NATIVE"/illustrations/*.svg "$NATIVE/build/tmp/figures/"
 
-# EPUB 直接封装 SVG 源文件，避免封面文字随构建机字体栅格变化。
+# 先封装 SVG 原稿；finish_epub.py 另加高清 PNG 供阅读器显示。
 COVER="$NATIVE/illustrations/front.svg"
 python3 "$NATIVE/build/render_mermaid.py" \
   --out "$NATIVE/build/tmp/src" --figures "$NATIVE/build/tmp/figures" "${SRC[@]}"
