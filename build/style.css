@@ -1,14 +1,21 @@
-/* 打印与 EPUB 共用样式：中文正文、表格、代码块、分页控制 */
+/* A4 打印样式；EPUB 使用独立的 epub.css。 */
 @page {
   size: A4;
   margin: 18mm 16mm 20mm 16mm;
+  @bottom-center {
+    content: "拆闸  ·  " counter(page);
+    font: 8pt "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    color: #637c80;
+  }
 }
+
+@page :first { @bottom-center { content: none; } }
 
 html { font-size: 10.5pt; }
 
 body {
   font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans CJK SC", sans-serif;
-  line-height: 1.75;
+  line-height: 1.68;
   color: #1a1a1a;
   max-width: none;
   margin: 0;
@@ -19,13 +26,15 @@ h1, h2, h3, h4 {
   font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
   line-height: 1.4;
   color: #111;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 h1 {
   font-size: 20pt;
   margin: 0 0 1.2em;
   padding-bottom: .4em;
-  border-bottom: 2px solid #2f5d8a;
+  border-bottom: 1.5px solid #173f50;
   page-break-before: always;
   break-before: page;
 }
@@ -35,13 +44,14 @@ h1.title { page-break-before: auto; break-before: auto; border: none; }
 h2 { font-size: 14.5pt; margin: 1.4em 0 .6em; }
 h3 { font-size: 12pt; margin: 1.1em 0 .5em; }
 
-p { margin: .55em 0; text-align: justify; }
+p { margin: .55em 0; text-align: left; }
+p, li { orphans: 3; widows: 3; }
 
 blockquote {
   margin: .9em 0;
   padding: .6em 1em;
-  border-left: 3px solid #2f5d8a;
-  background: #f4f7fa;
+  border-left: 3px solid #ad5538;
+  background: #faf7ef;
   color: #333;
 }
 
@@ -50,18 +60,22 @@ table {
   width: 100%;
   margin: .9em 0;
   font-size: 9.5pt;
-  page-break-inside: avoid;
-  break-inside: avoid;
+  page-break-inside: auto;
+  break-inside: auto;
 }
+
+thead { display: table-header-group; }
+tr { page-break-inside: avoid; break-inside: avoid; }
 
 th, td {
   border: 1px solid #b9c4cf;
   padding: .35em .5em;
   vertical-align: top;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
-th { background: #eaf0f6; font-weight: 600; }
+th { background: #e2e9e2; font-weight: 600; }
 
 code {
   font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
@@ -69,6 +83,7 @@ code {
   background: #f2f3f5;
   padding: .1em .3em;
   border-radius: 3px;
+  overflow-wrap: anywhere;
 }
 
 pre {
@@ -81,6 +96,7 @@ pre {
   line-height: 1.5;
   page-break-inside: avoid;
   break-inside: avoid;
+  white-space: pre-wrap;
 }
 
 pre code { background: none; padding: 0; }
@@ -94,7 +110,7 @@ hr {
   margin: 1.6em 0;
 }
 
-a { color: #2f5d8a; text-decoration: none; }
+a { color: #173f50; text-decoration: none; }
 
 /* 目录页 */
 nav#TOC, #TOC {
@@ -105,5 +121,35 @@ nav#TOC, #TOC {
 #TOC > ul { padding-left: 0; }
 #TOC li { margin: .25em 0; }
 
-/* EPUB 内联图片上限 */
+@media print {
+  #TOC { font-size: 9pt; line-height: 1.45; }
+  #TOC > ul { columns: 2; column-gap: 8mm; }
+  #TOC > ul > li { break-inside: avoid; margin-bottom: .8em; }
+  #TOC li li { margin: .14em 0; }
+}
+
+/* 打印图片上限 */
 img { max-width: 100%; }
+
+/* 长流程图必须完整留在一页；自动等比缩放，图注随图。 */
+figure {
+  margin: 1em 0;
+  text-align: center;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+figure img { width: auto; height: auto; max-height: 180mm; }
+figcaption { font-size: 9pt; color: #555; }
+.book-figure { break-inside: avoid; page-break-inside: avoid; }
+.case-note { margin: 1em 0; padding: .6em .9em; border-left: 2px solid #ad5538; background: #faf7ef; break-inside: avoid; }
+.compact-table { break-inside: avoid; page-break-inside: avoid; }
+.toc-page { float: right; min-width: 2em; text-align: right; font-variant-numeric: tabular-nums; }
+#TOC a { display: block; padding-right: .2em; }
+
+#reader-index { break-before: page; page-break-before: always; }
+.print-cover { min-height: 250mm; display: flex; flex-direction: column; justify-content: center;
+  break-after: page; page-break-after: always; }
+.print-cover p { text-align: center; color: #637c80; }
+.print-cover .cover-author { margin-top: 22mm; font-size: 14pt; color: #173f50; }
+.print-cover figure { margin: 0; }
+#reading-notes { margin-top: 0; }

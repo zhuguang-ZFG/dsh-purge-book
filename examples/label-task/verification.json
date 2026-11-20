@@ -1,0 +1,29 @@
+{
+  "scope": "虚构资料的本地教学校验；不代表真实 DSH 运行结果",
+  "sha256": {
+    "input.json": "564aa5eae0ae5db3d8c8bcd12b890c1921e76dec40a6bf4c2bbb68f90e174b9b",
+    "output-incomplete.json": "ceca61568d067593f4681e26d1780d70df6be8ab5157bdec76913eda632dc816",
+    "output.json": "bf1c40ffd0bca5ca6ee86644bba297ff7458a122a4773128314d81aeb5577b8d"
+  },
+  "incomplete": {
+    "missing": [
+      "A12"
+    ],
+    "unexpected": [],
+    "duplicate": [],
+    "order_matches": false,
+    "content_matches": false,
+    "passed": false
+  },
+  "corrected": {
+    "missing": [],
+    "unexpected": [],
+    "duplicate": [],
+    "order_matches": true,
+    "content_matches": true,
+    "passed": true
+  },
+  "host_install_apply": "未测",
+  "process_loading": "未测",
+  "model_input": "未测"
+}

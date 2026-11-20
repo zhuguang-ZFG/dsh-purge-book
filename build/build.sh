@@ -2,6 +2,7 @@
 # 构建 PDF 与 EPUB：pandoc 负责 EPUB/HTML，Chrome headless 负责 PDF（避开 LaTeX）
 set -euo pipefail
 cd "$(dirname "$0")/.."
+export PYTHONUTF8=1
 
 OUT=dist
 mkdir -p "$OUT" build/tmp
@@ -35,7 +36,7 @@ awk '
   }
 ' README.md > build/tmp/preface.md
 
-SRC=(build/tmp/preface.md 00-序章-从一个我不能说起.md 01-七道闸门.md 02-八十六刀.md 03-组装权之战.md 04-证据账本.md 05-红队指挥官.md 06-造车记.md 07-结语.md 附录A-命令速查.md 附录B-术语表.md)
+SRC=(build/tmp/preface.md 00-序章-从一个我不能说起.md 01-七道闸门.md 02-五十九刀.md 03-组装权之战.md 04-证据账本.md 05-红队指挥官.md 06-造车记.md 07-结语.md 附录A-命令速查.md 附录B-术语表.md)
 
 # ---- Chrome 定位（Windows / Linux 通用）----
 if [ -z "${CHROME_PATH:-}" ]; then
@@ -48,18 +49,12 @@ if [ -z "${CHROME_PATH:-}" ]; then
 fi
 [ -n "${CHROME_PATH:-}" ] || { echo "未找到 Chrome/Edge" >&2; exit 1; }
 export CHROME_PATH
-
-SANDBOX_FLAGS=()
-if [ -n "${CI:-}" ]; then SANDBOX_FLAGS+=(--no-sandbox); fi
+python3 build/check_toolchain.py
 
 # ---- Mermaid 预渲染：源文件保留可编辑代码，pandoc 只消费 build/tmp/src 副本 ----
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 NATIVE="$ROOT"
 if command -v cygpath >/dev/null 2>&1; then NATIVE="$(cygpath -m "$ROOT")"; fi
-case "$NATIVE" in
-  /*) URI_ROOT="file://$NATIVE" ;;
-  *)  URI_ROOT="file:///$NATIVE" ;;
-esac
 
 # ---- 章插图：源文件在 illustrations/，先生成再复制到 figures/ 供 pandoc 解析 ----
 python3 "$NATIVE/build/draw_illustrations.py"
@@ -74,17 +69,21 @@ for i in "${!SRC[@]}"; do SRC[$i]="build/tmp/src/$(basename "${SRC[$i]}")"; done
 
 # ---- EPUB ----
 pandoc "${SRC[@]}" \
+  --lua-filter=build/navigation.lua \
   --metadata-file=build/metadata.yaml \
   --resource-path=build/tmp/figures \
   --toc --toc-depth=2 \
   --split-level=1 \
-  --css=build/style.css \
+  --css=build/epub.css \
   --epub-title-page=true \
   --epub-cover-image="$COVER" \
   -o "$OUT/chaizha.epub"
 
+python3 "$NATIVE/build/finish_epub.py"
+
 # ---- HTML -> PDF（Chrome headless）----
 pandoc "${SRC[@]}" \
+  --lua-filter=build/navigation.lua \
   --metadata-file=build/metadata.yaml \
   --resource-path=build/tmp/figures \
   --toc --toc-depth=2 \
@@ -93,9 +92,8 @@ pandoc "${SRC[@]}" \
   --css=build/style.css \
   -o build/tmp/book.html
 
-HTML_URI="$URI_ROOT/build/tmp/book.html"
-"$CHROME_PATH" --headless --disable-gpu "${SANDBOX_FLAGS[@]}" --no-pdf-header-footer \
-  --generate-pdf-document-outline \
-  --print-to-pdf="$NATIVE/$OUT/chaizha.pdf" "$HTML_URI" >/dev/null 2>&1
+python3 "$NATIVE/build/print_pdf.py" --chrome "$CHROME_PATH"
+
+python3 "$NATIVE/build/finish_pdf.py"
 
 ls -la "$OUT"

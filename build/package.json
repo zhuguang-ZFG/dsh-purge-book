@@ -1,6 +1,10 @@
 {
   "dependencies": {},
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^12.2.0"
+    "@mermaid-js/mermaid-cli": "12.2.0",
+    "epubjs": "0.3.93",
+    "jszip": "3.10.1",
+    "perfect-freehand": "1.2.3",
+    "puppeteer": "25.18.1"
   }
 }

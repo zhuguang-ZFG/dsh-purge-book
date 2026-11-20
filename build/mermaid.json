@@ -1,0 +1,34 @@
+{
+  "look": "handDrawn",
+  "handDrawnSeed": 29,
+  "theme": "base",
+  "htmlLabels": false,
+  "fontFamily": "Microsoft YaHei, Noto Sans CJK SC, sans-serif",
+  "flowchart": {
+    "padding": 10,
+    "nodeSpacing": 24,
+    "rankSpacing": 22,
+    "minNodeWidth": 80
+  },
+  "sequence": {
+    "width": 105,
+    "height": 40,
+    "actorMargin": 24,
+    "diagramMarginX": 8,
+    "messageMargin": 28,
+    "actorFontSize": 18,
+    "messageFontSize": 18,
+    "noteFontSize": 18,
+    "mirrorActors": false
+  },
+  "themeVariables": {
+    "fontSize": "18px",
+    "fontFamily": "Microsoft YaHei, Noto Sans CJK SC, sans-serif",
+    "primaryColor": "#faf7ef",
+    "primaryTextColor": "#173f50",
+    "primaryBorderColor": "#45626d",
+    "lineColor": "#637c80",
+    "secondaryColor": "#e2e9e2",
+    "tertiaryColor": "#efded0"
+  }
+}

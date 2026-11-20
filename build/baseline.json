@@ -1,0 +1,296 @@
+{
+  "repository": "https://github.com/CallMeGuLab/dsh-purge-safe",
+  "commit": "cc881fbd68b891772330c6b0d275b0c971794e00",
+  "checked_on": "2026-11-20",
+  "package": "dsh-purge-safe",
+  "version": "2.0.0",
+  "host_target": "0.2.2-rc.3",
+  "hash_normalization": "UTF-8 bytes with CRLF converted to LF",
+  "patch_arrays": {
+    "PATCHES": 5,
+    "CODE_PATCHES": 3,
+    "ENGINE_PATCHES": 8,
+    "NEW_TOOL_PATCHES": 43
+  },
+  "cli_modes": [
+    "--apply",
+    "--revert",
+    "--uninstall",
+    "--status",
+    "--edit",
+    "--help"
+  ],
+  "files": {
+    "package.json": "5aeb1f0ad8c3cd9ebee72422821375c128a3162b6bc5288a7cb7349fb438eb23",
+    "README.md": "629dba7ec0bfb37168e4ddec986edfd04bbd1866ab15409e9502b7b48c021902",
+    "README.zh-CN.md": "13ec220ebc867f667d7989206c2017ea5bc1441fca570f08f4ef3d59ad8e86d5",
+    "release-notes.md": "d29ccf7bd7151a35d4eadd52afa076b5e04416c9d5745d73a60fd1f0c7834927",
+    "NOTICE": "104121d685cbc6ce40015fc985ba885280d7ff62b63c2368f0974012eb870837",
+    "LICENSE": "8a4c05d3c1afbc8f003e9bc32bff85169dc08bd24578cc73143f2e0a9279e307",
+    "bin/dsh-purge-safe.js": "fce7df208fac6fb03efeba0f3beddde20ad97f14e1dd5e4850042055b4172ecd",
+    "cordis.patch.yml": "0452fed76bc7a80018583d632da7f069c827aa80b6ce691fd73331c2a8fd85c1",
+    "lib/core.js": "90e7937fc83a6ec6ccdf1ed9fdf37a9b7cfd6da6952366012caff7d0391dd11e",
+    "lib/identity.js": "920e1cbf5110f7e0ccd8a46ef7b9ad49ec54c101f0422d84aab843c9a3b36ffd",
+    "lib/rules.js": "78ee10347e57c9d5d86e61fbcf66154098fe7fad7b7ce38086bc131061796387",
+    "lib/index.js": "cf7685efa5648874b706efab7a585276ca4f9bbfaf5a0aba1f6669d02962a046",
+    "lib/continue-retry.js": "50baf44ba91fb292e6f3006ee49a752f7600488f83e8489446d1be774c18c8b1",
+    "lib/drill-grant.js": "953ffa4d727a4d713f7d4a284949d0351aceb625e4d80cd85661c541669c2634",
+    "lib/update.js": "e14ac80e1b3007e24faf6a3afb51b6bf8a26c1ac11555a14847a1a0c658be757",
+    "lib/uninstall.js": "f6300e70debb256e414fc299a5cc0587e532f9d37cdada974b92a8b560be98c0",
+    "lib/tool-gate.js": "c21d2c5905bb77788eca3faa17b1f41b8f263c1543f95ef2e4a264b51aae89fb",
+    "lib/subagent-control.js": "4d757eb4355ea9433fbb2994f0aeae77348ce1999f98d1363052fbe7f1bd22d6",
+    "lib/redteam/schema.js": "d1cda39be8deee96451f9da63ad0e938c21053c78c361d3451bcb8debe581553",
+    "lib/redteam/store-core.js": "7dda2fb2d1fc46d2a63d26cd7663d9b7642df766ea8f74cfdbe59379e52df97e",
+    "lib/redteam/tools.js": "ba47bbf11a23278155b88ccb7ed2fed2ae28dc32ef3c08f276c9de2730bbc99e",
+    "lib/redteam/team-mode.js": "fc4bf7a04e7cd7a040ae1477c0cb7fa220fca7838f09bcb34a09319ad197a35e",
+    "lib/redteam/role-section.js": "adf00067471e5ce5a647fc7bd8ab943b1673e33c31855bfc17ca712c1f86c900",
+    "docs/redteam-superagent-design.md": "224a665ef019be4fb7b9dd6d3be05d825a051dd108fcef6f13e53e0362a5286e",
+    "docs/redteam-superagent-dev.md": "cefac69537a000253623102a3c6807a2e40a2c925ba0e9a90c2102d679a5c708"
+  },
+  "patches": [
+    {
+      "id": 1,
+      "name": "WORKSPACE_CONTEXT_INTRO"
+    },
+    {
+      "id": 4,
+      "name": "SYSTEM_PROMPT_PERSONA"
+    },
+    {
+      "id": 43,
+      "name": "WEB_PRESET_IDENTITY_STRIP"
+    },
+    {
+      "id": 70,
+      "name": "PRESET_SHELL_NETWORK"
+    },
+    {
+      "id": 5,
+      "name": "APPROVAL_NEVER_SENTENCE"
+    },
+    {
+      "id": 6,
+      "name": "SANDBOX_DENY_FILE_WRITE"
+    },
+    {
+      "id": 7,
+      "name": "SANDBOX_MODE_DEFAULT"
+    },
+    {
+      "id": 8,
+      "name": "APPROVAL_POLICY_DEFAULT"
+    },
+    {
+      "id": 9,
+      "name": "APPROVAL_AUTO_GRANT"
+    },
+    {
+      "id": 10,
+      "name": "APPROVAL_CONFIG_DEFAULT_NEVER"
+    },
+    {
+      "id": 11,
+      "name": "APPROVAL_NEVER_SENTENCE_BYPASS"
+    },
+    {
+      "id": 12,
+      "name": "APPROVAL_ASK_SENTENCE_BYPASS"
+    },
+    {
+      "id": 13,
+      "name": "ESCALATION_WIDENING_EXEMPT"
+    },
+    {
+      "id": 14,
+      "name": "ESCALATION_GRANT_UNCONDITIONAL"
+    },
+    {
+      "id": 15,
+      "name": "SANDBOX_CONFINE_PASSTHROUGH"
+    },
+    {
+      "id": 16,
+      "name": "FS_FENCE_DISABLED"
+    },
+    {
+      "id": 17,
+      "name": "FS_OBSERVATION_INTENT_FREE"
+    },
+    {
+      "id": 18,
+      "name": "REPEAT_TOOL_REMINDER_DISABLED"
+    },
+    {
+      "id": 22,
+      "name": "READ_CAPS_RAISED"
+    },
+    {
+      "id": 23,
+      "name": "SUBAGENT_MAXDEPTH_RAISED"
+    },
+    {
+      "id": 25,
+      "name": "HARNESS_IDENTITY_STRIP"
+    },
+    {
+      "id": 26,
+      "name": "MINIMAL_PERSONA_PURGE"
+    },
+    {
+      "id": 29,
+      "name": "TOOL_WEB_UNTRUSTED_NEUTRAL"
+    },
+    {
+      "id": 33,
+      "name": "TOOL_SHELL_DENIAL_PROMPT"
+    },
+    {
+      "id": 34,
+      "name": "SANDBOX_HINT_NEUTRAL"
+    },
+    {
+      "id": 35,
+      "name": "ESCALATION_NEVER_REJECT"
+    },
+    {
+      "id": 36,
+      "name": "TOOL_FS_ESCALATION_SCHEMA"
+    },
+    {
+      "id": 37,
+      "name": "SUBAGENT_SCOPE_LOCK_NEUTRAL"
+    },
+    {
+      "id": 92,
+      "name": "SUBAGENT_SAME_INJECT_PATH"
+    },
+    {
+      "id": 38,
+      "name": "PERSONA_TEXT_PREFIX_ALIAS"
+    },
+    {
+      "id": 39,
+      "name": "SESSION_V0_PLUGIN_SUMMARY_ALIAS"
+    },
+    {
+      "id": 40,
+      "name": "COMPLETE_PROMPT_KEEP_INJECT"
+    },
+    {
+      "id": 42,
+      "name": "SETTINGS_LEGACY_API"
+    },
+    {
+      "id": 47,
+      "name": "ANTHROPIC_OAUTH_NO_CLAUDE_IDENTITY"
+    },
+    {
+      "id": 48,
+      "name": "TOOL_SHELL_DELETE_MOVE_NEUTRAL"
+    },
+    {
+      "id": 49,
+      "name": "ANTHROPIC_OAUTH_CLI_NEUTRAL"
+    },
+    {
+      "id": 51,
+      "name": "FRESH_SESSION_FULL_ACCESS"
+    },
+    {
+      "id": 52,
+      "name": "SESSION_LOG_CLOUD_UPLOAD_REMOVED"
+    },
+    {
+      "id": 55,
+      "name": "SYSTEM_PROMPT_REPLACE_HEAD"
+    },
+    {
+      "id": 66,
+      "name": "SYSTEM_PROMPT_RENDER_GUARD"
+    },
+    {
+      "id": 68,
+      "name": "SYSTEM_NODES_CONTENT_GUARD"
+    },
+    {
+      "id": 69,
+      "name": "MODEL_STREAM_RELEASE"
+    },
+    {
+      "id": 72,
+      "name": "MESSAGES_SYSTEM_CURRENT"
+    },
+    {
+      "id": 75,
+      "name": "REWIND_RESET_TODOS"
+    },
+    {
+      "id": 57,
+      "name": "DEEPSEEK_SYSTEM_ROLE"
+    },
+    {
+      "id": 58,
+      "name": "REWIND_SKIP_DERIVE"
+    },
+    {
+      "id": 59,
+      "name": "OFFICIAL_AUTO_REVIEW_PASSTHROUGH"
+    },
+    {
+      "id": 61,
+      "name": "OFFICIAL_SANDBOX_POLICY_NEUTRAL"
+    },
+    {
+      "id": 63,
+      "name": "OFFICIAL_PLAN_MODE_NEUTRAL"
+    },
+    {
+      "id": 78,
+      "name": "OVERLAY_RESTORE_FROM_BAK"
+    },
+    {
+      "id": 85,
+      "name": "SESSION_PROMPT_STEER_INTERRUPT"
+    },
+    {
+      "id": 86,
+      "name": "SESSION_QUEUE_STEER_INTERRUPT"
+    },
+    {
+      "id": 89,
+      "name": "SYSTEM_FIELD_EXTRACT"
+    },
+    {
+      "id": 90,
+      "name": "OPENAI_NATIVE_SYSTEM_ROLE"
+    },
+    {
+      "id": 91,
+      "name": "ANTHROPIC_NATIVE_PARAMS_SYSTEM"
+    },
+    {
+      "id": 93,
+      "name": "PRODUCT_ANALYTICS_DEFAULT_OFF"
+    },
+    {
+      "id": 94,
+      "name": "PRODUCT_TELEMETRY_OTEL_NOOP"
+    },
+    {
+      "id": 95,
+      "name": "SESSION_TELEMETRY_OTEL_DISABLED"
+    },
+    {
+      "id": 96,
+      "name": "SKILL_OFFICE_ASSET_FALLBACK"
+    }
+  ],
+  "verification_scope": {
+    "source": true,
+    "offline_components": true,
+    "live_install": false,
+    "live_apply": false,
+    "live_restart": false,
+    "model_evaluation": false
+  }
+}

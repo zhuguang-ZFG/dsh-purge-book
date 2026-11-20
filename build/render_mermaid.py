@@ -12,6 +12,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / "build"
 BLOCK = re.compile(r"^```mermaid\s*\n(.*?)^```\s*$", re.M | re.S)
+CAPTIONS = {
+    ('01', 1): '流程 1-A：一次工具调用的往返',
+    ('01', 2): '流程 1-B：五处改动的生效时机',
+    ('02', 1): '流程 2-A：匹配、应用与恢复',
+    ('03', 1): '流程 3-A：正文选择与前缀折叠',
+    ('03', 2): '流程 3-B：尾段与动态上下文',
+    ('04', 1): '流程 4-A：任务未完成时怎样继续排查',
+    ('05', 1): '流程 5-A：派活、回报与处理确认',
+    ('06', 1): '流程 6-A：安装到恢复的验收顺序',
+    ('07', 1): '流程 7-A：版本更新后的复核',
+}
 
 
 def main():
@@ -49,11 +60,13 @@ def main():
             svg = figures / f"{stem}.svg"
             mmd.write_text(match.group(1), encoding="utf-8")
             result = subprocess.run(
-                ["bun", "x", "mmdc", "-i", str(mmd), "-o", str(svg), "-b", "transparent", *mmdc_extra],
+                ["bun", "x", "mmdc", "-i", str(mmd), "-o", str(svg),
+                 "-c", str(BUILD / "mermaid.json"), "-b", "transparent", *mmdc_extra],
                 cwd=BUILD,
                 env=env,
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
             )
             if result.returncode != 0:
                 raise RuntimeError(
@@ -63,7 +76,9 @@ def main():
             if not svg.exists() or svg.stat().st_size == 0:
                 raise RuntimeError(f"SVG 未生成: {svg}")
             # pandoc 通过 --resource-path 指向 figures 目录，引用写成文件名即可
-            return f"![图示 {stem}]({svg.name})"
+            # 保持独立段落，否则下一段文字会使 Pandoc 把图降为普通行内图片。
+            caption = CAPTIONS[(source.name[:2], counter)]
+            return f"\n\n![{caption}]({svg.name})\n\n"
 
         result = BLOCK.sub(render, source.read_text(encoding="utf-8"))
         # 插图源文件在仓库根目录；复制到 figures 后按文件名引用，源文件仍可被 GitHub 预览

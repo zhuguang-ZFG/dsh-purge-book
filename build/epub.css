@@ -1,0 +1,36 @@
+/* Reflowable reader layout; no paper dimensions or forced print page breaks. */
+html { font-size: 100%; }
+body { margin: 0 5%; font-family: sans-serif; line-height: 1.65; color: #202a2e; }
+h1,h2,h3 { line-height: 1.4; color: #173f50; break-after: avoid; }
+h1 { font-size: 1.65em; margin: 1em 0; }
+h2 { font-size: 1.3em; margin: 1.4em 0 .7em; }
+h3 { font-size: 1.15em; }
+p,li { text-align: left; letter-spacing: normal; word-spacing: normal; }
+p { margin: .65em 0; }
+a { color: #245669; text-decoration: underline; }
+code { font-family: monospace; font-size: .95em; overflow-wrap: anywhere; }
+.wrap-part { display: inline-block; white-space: pre; }
+pre { padding: .7em; white-space: pre-wrap; overflow-wrap: anywhere; background: #f1f4f2; }
+pre code { font-size: .9em; }
+table { width: 100%; border-collapse: collapse; font-size: .95em; }
+th,td { padding: .5em; text-align: left; vertical-align: top; border: 1px solid #b9c4c5; }
+th { background: #e2e9e2; }
+thead { display: table-header-group; }
+td .cell-label { display: none; }
+figure { margin: 1em 0; }
+img { max-width: 100%; height: auto; }
+figcaption { font-size: .95em; color: #53686b; text-align: left; }
+.case-note { padding: .7em 1em; border-left: .2em solid #ad5538; background: #faf7ef; }
+.figure-reading { margin: .7em 0 1.2em; }
+.figure-reading p { margin: .3em 0; }
+.figure-reading ol,.figure-reading ul { padding-left: 1.4em; }
+.figure-reading li { margin-bottom: .35em; }
+blockquote { margin: 1em 0; padding-left: 1em; border-left: .2em solid #ad5538; }
+/* Field cards also work in engines that ignore viewport media queries. */
+table,tbody,tr,td { display: block; width: auto; }
+thead { display: none; }
+tr { margin: 0 0 1em; padding: .4em .6em; border: 1px solid #b9c4c5; }
+td { border: 0; padding: .35em 0; overflow-wrap: anywhere; }
+td .cell-label { display: block; font-size: .85em; color: #637c80; margin-bottom: .15em; }
+td:first-child { font-weight: 600; }
+@media (max-width: 600px) { body { margin: 0 4%; } }
