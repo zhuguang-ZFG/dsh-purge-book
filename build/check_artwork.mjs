@@ -15,7 +15,7 @@ const executablePath=[process.env.CHROME_PATH,process.env.PUPPETEER_EXECUTABLE_P
  '/usr/bin/google-chrome','/usr/bin/chromium'].find(p=>p&&existsSync(p));
 assert(executablePath,'Set CHROME_PATH to a Chrome/Edge executable');
 console.log("Starting artwork browser");
-const browser=await puppeteer.launch({executablePath,headless:'shell',
+const browser=await puppeteer.launch({executablePath,headless:true,
  args:process.env.CI?['--no-sandbox']:[]});
 console.log("Browser connected");
 const report={plates:[],gallery:{}};

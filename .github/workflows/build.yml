@@ -27,7 +27,7 @@ jobs:
       - uses: browser-actions/setup-chrome@v1
         id: chrome
         with:
-          chrome-version: '157.0.8103.80'
+          chrome-version: '158.0.8127.36'
 
       - name: Install check dependency
         run: python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0

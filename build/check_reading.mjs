@@ -33,7 +33,7 @@ const executablePath=[process.env.CHROME_PATH,process.env.PUPPETEER_EXECUTABLE_P
  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
  '/usr/bin/google-chrome','/usr/bin/chromium'].find(p=>p&&existsSync(p));
 assert(executablePath,'Set CHROME_PATH');
-const browser=await puppeteer.launch({executablePath,headless:'shell',args:process.env.CI?['--no-sandbox']:[]});
+const browser=await puppeteer.launch({executablePath,headless:true,args:process.env.CI?['--no-sandbox']:[]});
 const report={reader:'epub.js 0.3.93 / JSZip 3.10.1',browser:await browser.version(),reflow:[],fonts:[],navigation:[],originals:[],printFigures:[]};
 try{
  const page=await browser.newPage();
