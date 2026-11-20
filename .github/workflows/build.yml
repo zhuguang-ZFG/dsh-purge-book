@@ -2,9 +2,13 @@ name: build-book
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'acceptance/**']
   pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: book-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
