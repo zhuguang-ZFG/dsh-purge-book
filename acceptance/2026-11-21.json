@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "date": "2026-11-21",
+  "timezone": "Asia/Shanghai",
+  "artifacts": {
+    "dist/chaizha.pdf": {
+      "sha256": "dadda04cc60466d7e6fc0353991de5df6d24eb7665564f933c0141430b9faac5",
+      "bytes": 2721103
+    },
+    "dist/chaizha.epub": {
+      "sha256": "8bd126a9d7c5167897a666ff58f7770129b14605225ab305e3c3993fd2e29e99",
+      "bytes": 9042253
+    },
+    "dist/illustrations.html": {
+      "sha256": "c8f37114aff8c93f75aa4f2eabf587ec6de6823947e5ec77403c0915fbd4505a",
+      "bytes": 4296136
+    }
+  },
+  "baselines": {
+    "dsh-purge-safe": "cc881fbd68b891772330c6b0d275b0c971794e00",
+    "pi-purge": "5cd5f3551fba1c7320751b825e9167da5af6c25e"
+  },
+  "live_dsh": {
+    "passed": true,
+    "version": "0.2.2-rc.3",
+    "patch_definitions_applied": 59,
+    "web_first": {
+      "ok": true,
+      "ready": true,
+      "surface": "web",
+      "patches_applied": 55,
+      "patches_pending": 0,
+      "patches_ready": 55
+    },
+    "web_restart": {
+      "ok": true,
+      "ready": true,
+      "surface": "web",
+      "patches_applied": 55,
+      "patches_pending": 0,
+      "patches_ready": 55
+    },
+    "task": {
+      "transport": "loopback Messages SSE fixture",
+      "requests": 2,
+      "injection_in_provider_input": true,
+      "records_equal": 12
+    },
+    "restored_files": 58,
+    "restore_differences": 0,
+    "headless_profile_overrides": {
+      "permission.defaultPreset": "workspace-write",
+      "HTTP-only redteam UI": "disabled"
+    },
+    "scope": "Windows DSH rc.3, isolated package copy; local deterministic transport, no model efficacy claim"
+  },
+  "desktop_pdf": {
+    "reader": "SumatraPDF 3.6.1",
+    "sha256": "dadda04cc60466d7e6fc0353991de5df6d24eb7665564f933c0141430b9faac5",
+    "bookmarks": [
+      {
+        "title": "封面",
+        "page": 1
+      },
+      {
+        "title": "第 3 章 组装权之战：正文最后落在哪里",
+        "page": 18
+      },
+      {
+        "title": "图 3-1 · 正文落点",
+        "page": 18
+      },
+      {
+        "title": "附录 A 命令与状态速查",
+        "page": 41
+      },
+      {
+        "title": "四项验收",
+        "page": 24
+      }
+    ],
+    "screenshots": [
+      "sumatra-1.png",
+      "sumatra-2.png",
+      "sumatra-3.png",
+      "sumatra-4.png",
+      "sumatra-5.png"
+    ],
+    "pages": 49,
+    "bookmark_count": 106,
+    "pagination": "1 -> 2 -> 1",
+    "search": {
+      "term": "persona",
+      "page": 6
+    },
+    "passed": true
+  },
+  "desktop_epub": {
+    "reader": "Neat Reader 9.0.11",
+    "passed": true,
+    "sha256": "8bd126a9d7c5167897a666ff58f7770129b14605225ab305e3c3993fd2e29e99",
+    "profile": "neat-profile6",
+    "imported_book_guid": "dfdc30b7-afe7-4aa2-96bf-4056b33c1ca6",
+    "images_decoded": 51,
+    "original_roundtrips": 25,
+    "fonts": [
+      {
+        "requested": 16,
+        "actual": 16,
+        "position": {
+          "spineIndex": 12,
+          "pageIndex": 0,
+          "progress": 0,
+          "pageCount": 23
+        }
+      },
+      {
+        "requested": 24,
+        "actual": 24,
+        "position": {
+          "spineIndex": 12,
+          "pageIndex": 0,
+          "progress": 0,
+          "pageCount": 38
+        }
+      }
+    ],
+    "pagination": {
+      "before": {
+        "spineIndex": 7,
+        "pageIndex": 0,
+        "progress": 0,
+        "pageCount": 11
+      },
+      "next": {
+        "spineIndex": 7,
+        "pageIndex": 2,
+        "progress": 0.18181818181818182,
+        "pageCount": 11
+      },
+      "back": {
+        "spineIndex": 7,
+        "pageIndex": 0,
+        "progress": 0,
+        "pageCount": 11
+      }
+    },
+    "screenshot": "neat-final-verified-cover.png"
+  },
+  "local_checks": {
+    "book_checks_passed": 68,
+    "print_pages": 49,
+    "figure_regions": 25,
+    "min_figure_chinese_points": 8.83,
+    "print_failures": [],
+    "artwork_plates": 16,
+    "epubjs_layouts": 44,
+    "epubjs_font_fallbacks": 22,
+    "epubjs_navigation": 33,
+    "epubjs_original_roundtrips": 25,
+    "mupdf_layouts": 4,
+    "epubcheck": {
+      "version": "5.4.0",
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "ci": {
+    "conclusion": "success",
+    "head_branch": "acceptance/book-20261120",
+    "head_sha": "6c21194e7752f3c554f92accbbd2510423903bad",
+    "html_url": "https://github.com/zhuguang-ZFG/dsh-purge-book/actions/runs/44778702841",
+    "id": 44778702841,
+    "status": "completed",
+    "updated_at": "2026-11-20T17:01:01Z",
+    "linux_build": {
+      "artifacts": {
+        "dist/chaizha.pdf": {
+          "bytes": 2291506,
+          "sha256": "e0eb50f03513a1520366a5366bb1ceba2a3a29cfa83e1738d8d164a24215aa94"
+        },
+        "dist/chaizha.epub": {
+          "bytes": 8615640,
+          "sha256": "71c08e3582b97ee760f42022a61d880cddcfccc179551df81b35fab18c07a6af"
+        },
+        "dist/illustrations.html": {
+          "bytes": 4296136,
+          "sha256": "c8f37114aff8c93f75aa4f2eabf587ec6de6823947e5ec77403c0915fbd4505a"
+        }
+      },
+      "print_pages": 50,
+      "print_failures": [],
+      "min_figure_chinese_points": 8.83
+    }
+  },
+  "unverified": [
+    "Online model reasoning, refusal rate and red-team efficacy",
+    "Official desktop DSH end-to-end workflow",
+    "pi-purge live host workflow",
+    "Apple Books, WeChat Read, Kindle and other physical readers"
+  ],
+  "notes": [
+    "Windows artifacts and Linux CI artifacts are separate builds; their bytes can differ.",
+    "Detailed host logs stay local and are excluded from the published snapshot.",
+    "No main branch merge or primary-workspace commit was performed."
+  ]
+}
