@@ -126,6 +126,9 @@ for entry in nav['entries']:
     label = entry['caption'] if entry['kind'] == 'figure' else entry['title']
     if normalized(label) not in normalized(pdf_page_texts[page]):
         bad_targets.append(entry['id'])
+        other_pages = [i + 1 for i, text in enumerate(pdf_page_texts) if normalized(label) in normalized(text)]
+        print('TARGET DIAGNOSTIC', json.dumps({'id': entry['id'], 'expected': label, 'page': page + 1,
+              'found_on': other_pages, 'page_start': pdf_page_texts[page][:500]}, ensure_ascii=False))
 check(not bad_targets, f'PDF 锚点目标页包含对应标题或完整图注（异常 {bad_targets}）')
 check(all(matching_bookmark(e['short'], e['id'])
           and sum(item.title == e['short'] for item in pdf_outline) == 1 for e in figures)

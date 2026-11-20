@@ -101,6 +101,7 @@ jobs:
         run: python build/check_epub_mupdf.py
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: book
@@ -108,3 +109,7 @@ jobs:
             dist/chaizha.pdf
             dist/chaizha.epub
             dist/illustrations.html
+            build/tmp/book.html
+            build/tmp/navigation.json
+            build/tmp/pdf-navigation.json
+            build/tmp/toolchain-check.json
