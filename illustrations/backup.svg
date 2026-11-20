@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 2·2</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">备份要能认出自己的版本</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">文件名相同，不代表内容仍属于同一版。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">文件名相同，不代表内容仍属于同一版。</text>
 <path d="M60 165 Q600 164.34 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <text x="200" y="211" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="25" font-weight="normal" text-anchor="middle" letter-spacing="0">升级前</text>
 <path d="M102 239 L257 239 L293 273 L293 352 L102 352 Z" fill="#e2e9e2" opacity="1" />

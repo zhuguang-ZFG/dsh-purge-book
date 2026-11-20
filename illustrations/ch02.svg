@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 02</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">五十九刀，逐项核对</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">把定义、编号与展示计数分开。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">把定义、编号与展示计数分开。</text>
 <path d="M60 165 Q600 165.49 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <text x="64" y="228" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="75" font-weight="normal" text-anchor="start" letter-spacing="0">59</text>
 <text x="166" y="224" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="28" font-weight="normal" text-anchor="start" letter-spacing="0">条定义</text>
@@ -253,7 +253,7 @@
 <path d="M406 473 Q416.5 472.88 427 473" fill="none" stroke="#637c80" stroke-width="0.8" opacity="0.5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M450 458 Q464.5 458.66 479 459 Q482 469.5 481 480 Q464.5 480.34 448 481 Q447 469.5 450 458 Z" fill="#e2e9e2" stroke="#173f50" stroke-width="1.4" opacity="1" stroke-linecap="round" stroke-linejoin="round" data-patch-index="58"/>
 <path d="M453 473 Q463.5 472.98 474 473" fill="none" stroke="#637c80" stroke-width="0.8" opacity="0.5" stroke-linecap="round" stroke-linejoin="round" />
-<text x="72" y="533" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">格子只表示定义，不表示已应用成功。</text>
+<text x="72" y="533" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">格子只表示定义，不表示已应用成功。</text>
 <text x="72" y="569" fill="#173f50" font-family="Consolas, Liberation Mono, monospace" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">最大 id = 96</text>
 <path d="M613 210 Q612.6 384.5 613 559" fill="none" stroke="#c9d1c7" stroke-width="1.2" opacity="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 7" />
 <path d="M714 223 Q889.5 222.25 1065 224 Q1068 357.5 1067 491 Q889.5 492.75 712 492 Q711 357.5 714 223 Z" fill="#e2e9e2" stroke="#c9d1c7" stroke-width="1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />

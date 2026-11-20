@@ -55,6 +55,8 @@ baseline = json.loads((ROOT / "build/baseline.json").read_text(encoding="utf-8")
 reader = PdfReader(PDF)
 pdf_page_texts = [page.extract_text() or "" for page in reader.pages]
 pdf_text = "\n".join(pdf_page_texts)
+check(not any('\u2e80' <= char <= '\u2fff' for char in pdf_text),
+      'PDF 复制文字不混入 CJK 部首字符')
 for token in TOKENS:
     check(token not in pdf_text, f"PDF 无 Mermaid 源码字面量 {token!r}")
 check("\\|" not in pdf_text, "PDF 无表格转义残留 \\|")

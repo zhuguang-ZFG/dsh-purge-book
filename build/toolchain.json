@@ -6,5 +6,6 @@
   "chrome": "158.0.8127.36",
   "pypdf": "6.21.2",
   "pymupdf": "1.28.0",
+  "fonttools": "4.66.1",
   "epubcheck": "5.4.0"
 }

@@ -35,7 +35,7 @@ jobs:
           chrome-version: '158.0.8127.36'
 
       - name: Install check dependency
-        run: python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0
+        run: python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0 fonttools==4.66.1
 
       - uses: actions/setup-java@v4
         with:
@@ -45,13 +45,11 @@ jobs:
       - name: Install Chinese fonts
         timeout-minutes: 5
         run: |
-          if [[ "$(fc-match -f '%{family}' 'Noto Sans CJK SC')" == *"Noto Sans CJK"* ]]; then exit 0; fi
-          apt_options=(-o Acquire::ForceIPv4=true -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20)
-          if ! sudo apt-get "${apt_options[@]}" install --no-install-recommends -y fonts-noto-cjk; then
-            sudo apt-get "${apt_options[@]}" update
-            sudo apt-get "${apt_options[@]}" install --no-install-recommends -y fonts-noto-cjk
-          fi
-          [[ "$(fc-match -f '%{family}' 'Noto Sans CJK SC')" == *"Noto Sans CJK"* ]]
+          python build/prepare_fonts.py
+          mkdir -p "$HOME/.local/share/fonts/chaizha"
+          cp build/tmp/fonts/NotoSansSC-{Regular,Bold}.ttf "$HOME/.local/share/fonts/chaizha/"
+          fc-cache -f
+          [[ "$(fc-match -f '%{family}' 'Noto Sans SC')" == *"Noto Sans SC"* ]]
 
       - name: Install diagram renderer
         working-directory: build
@@ -126,3 +124,7 @@ jobs:
             build/tmp/navigation.json
             build/tmp/pdf-navigation.json
             build/tmp/toolchain-check.json
+            build/tmp/fonts/font-report.json
+            build/tmp/toc-pages.json
+            build/tmp/reading-check/*.json
+            build/tmp/artwork-check/report.json

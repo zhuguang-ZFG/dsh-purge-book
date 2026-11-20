@@ -20,7 +20,7 @@ MUTED = "#637c80"
 PALE = "#e2e9e2"
 RUST = "#efded0"
 FAINT = "#c9d1c7"
-SANS = "Microsoft YaHei, Noto Sans CJK SC, sans-serif"
+SANS = "Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif"
 HAND = "KaiTi, STKaiti, Noto Serif CJK SC, serif"
 MONO = "Consolas, Liberation Mono, monospace"
 

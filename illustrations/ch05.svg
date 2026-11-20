@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 05</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">派活之后，要有回音</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">任务、回报、处理确认，形成一次可追踪的协作。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">任务、回报、处理确认，形成一次可追踪的协作。</text>
 <path d="M60 165 Q600 166.31 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M86 244 Q208 243.78 330 245 Q333 382 332 519 Q208 520.22 84 520 Q83 382 86 244 Z" fill="#e2e9e2" stroke="#c9d1c7" stroke-width="1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M88 247 Q182.72 246.51 277.44 246" fill="none" stroke="#c9d1c7" stroke-width="0.7" opacity="0.27" stroke-linecap="round" stroke-linejoin="round" />
@@ -202,7 +202,7 @@
 <path d="M845 461Q845 461.01 842.89 460.35Q840.79 459.69 838.85 458.74Q836.91 457.78 835.19 456.4Q833.47 455.01 833.47 455Q833.47 455 833.47 455Q833.47 454.99 835.61 455.57Q837.75 456.16 839.65 457.2Q841.56 458.25 843.28 459.62Q845 460.99 845 461Z" fill="#ad5538" opacity="1" data-ink="pressure"/>
 <text x="600" y="486" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="14" font-weight="normal" text-anchor="middle" letter-spacing="0">03 / ACK</text>
 <path d="M415 526 Q600 527.04 785 527 Q788 551 787 575 Q600 574.96 413 576 Q412 551 415 526 Z" fill="#e2e9e2" stroke="#637c80" stroke-width="1.2" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
-<text x="600" y="559" fill="#173f50" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" letter-spacing="0">事实记录 / acknowledged_at</text>
+<text x="600" y="559" fill="#173f50" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" letter-spacing="0">事实记录 / acknowledged_at</text>
 <path d="M600 497 Q599.98 508.5 600 520" fill="none" stroke="#637c80" stroke-width="1" opacity="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 5" />
 <path d="M60 610Q60 609.99 62.32 609.17Q64.65 608.35 67 608.11Q69.36 607.87 71.71 607.7Q74.07 607.53 76.43 607.5Q78.8 607.47 81.16 607.54Q83.53 607.61 85.89 607.73Q88.26 607.85 90.63 608.42Q93 608.99 93 609Q93 609 93 609Q93 609.01 90.65 609.66Q88.31 610.31 85.96 610.53Q83.61 610.75 81.26 610.95Q78.91 611.15 76.56 611.25Q74.2 611.36 71.85 611.36Q69.49 611.35 67.13 611.29Q64.77 611.24 62.39 610.62Q60 610.01 60 610Z" fill="#ad5538" opacity="1" data-ink="pressure"/>
 <text x="108" y="617" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="22" font-weight="normal" text-anchor="start" letter-spacing="0">ready 是回报状态；完成仍需要实际产物。</text>

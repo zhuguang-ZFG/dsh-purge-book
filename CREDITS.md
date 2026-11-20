@@ -23,6 +23,7 @@
 - epub.js 0.3.93（Free BSD）与 JSZip 3.10.1（MIT/GPLv3 双许可）：本地验收中读取归档 EPUB、重排、翻页和导航；不嵌入书籍内容。
 - EPUBCheck 5.4.0（BSD-3-Clause）：EPUB 包结构与资源关系校验。
 - perfect-freehand 1.2.3（MIT，Stephen Ruiz Ltd）：插图主体线条的压力轮廓生成；由锁文件记录依赖。
+- Noto Sans SC（SIL Open Font License 1.1，notofonts/noto-cjk）：Linux 成书字体，固定提交 `165c01b46ea533872e002e0785ff17e44f6d97d8`；构建时生成字符子集，来源与摘要见 `build/prepare_fonts.py`。字体许可见该仓库 `Sans/LICENSE`。
 - Rough.js、Excalidraw：笔触控制与离线缩放查看体验的参考；固定提交和采用范围见 `VISUAL_REFERENCES.md`。
 
 ## 风格参考

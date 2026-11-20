@@ -17,7 +17,8 @@ def main():
     args = parser.parse_args()
     expected = json.loads((ROOT / 'build/toolchain.json').read_text(encoding='utf-8'))
     actual = {'python': platform.python_version(), 'pypdf': importlib.metadata.version('pypdf'),
-              'pymupdf': importlib.metadata.version('PyMuPDF')}
+              'pymupdf': importlib.metadata.version('PyMuPDF'),
+              'fonttools': importlib.metadata.version('fonttools')}
     for tool in ('bun', 'node', 'pandoc'):
         output = subprocess.check_output([tool, '--version'], text=True, encoding='utf-8')
         actual[tool] = re.search(r'\d+(?:\.\d+)+', output).group()

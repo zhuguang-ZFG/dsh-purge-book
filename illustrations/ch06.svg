@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 06</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">拆得开，也装得回</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">给下一次维护留下装配依据。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">给下一次维护留下装配依据。</text>
 <path d="M60 165 Q600 166.64 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <g transform="translate(134 246) scale(1.12) rotate(0)">
 <path d="M-34 283 C-34 278.03 70.77 274 200 274 C329.23 274.4 434 278.03 434 283 C433.7 287.97 329.23 292 200 292 C70.77 292 -34 287.97 -34 283 Z" fill="#e2e9e2" stroke="#c9d1c7" stroke-width="0.5" opacity="1" stroke-linecap="round" stroke-linejoin="round" />

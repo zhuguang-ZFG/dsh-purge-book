@@ -3,7 +3,7 @@
   "handDrawnSeed": 29,
   "theme": "base",
   "htmlLabels": false,
-  "fontFamily": "Microsoft YaHei, Noto Sans CJK SC, sans-serif",
+  "fontFamily": "Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif",
   "flowchart": {
     "padding": 10,
     "nodeSpacing": 24,
@@ -23,7 +23,7 @@
   },
   "themeVariables": {
     "fontSize": "18px",
-    "fontFamily": "Microsoft YaHei, Noto Sans CJK SC, sans-serif",
+    "fontFamily": "Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif",
     "primaryColor": "#faf7ef",
     "primaryTextColor": "#173f50",
     "primaryBorderColor": "#45626d",

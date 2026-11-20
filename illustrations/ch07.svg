@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 07</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">谁在驱动谁</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">把扳手交出去，也把维护记录交出去。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">把扳手交出去，也把维护记录交出去。</text>
 <path d="M60 165 Q600 165.71 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <g transform="translate(99 285) scale(0.96) rotate(0)">
 <path d="M-18 222 C-18 218.13 44.23 215 121 215 C197.77 215.4 260 218.13 260 222 C259.7 225.87 197.77 229 121 229 C44.23 229 -18 225.87 -18 222 Z" fill="#e2e9e2" stroke="#c9d1c7" stroke-width="0.6" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
@@ -306,7 +306,7 @@
 <path d="M454 331 Q527.67 331.61 601.32 330" fill="none" stroke="#173f50" stroke-width="0.7" opacity="0.27" stroke-linecap="round" stroke-linejoin="round" />
 <text x="547" y="366" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="25" font-weight="normal" text-anchor="middle" letter-spacing="0">留给接手者</text>
 <path d="M474 384 Q546.99 385.74 620 384.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
-<text x="547" y="417" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" letter-spacing="0">版本 · 路径 · 证据</text>
+<text x="547" y="417" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" letter-spacing="0">版本 · 路径 · 证据</text>
 <text x="223" y="533" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="22" font-weight="normal" text-anchor="middle" letter-spacing="0">模型</text>
 <text x="923" y="548" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="22" font-weight="normal" text-anchor="middle" letter-spacing="0">宿主</text>
 <path d="M60 610Q60 609.99 62.32 609.04Q64.64 608.1 67 608.15Q69.37 608.2 71.73 608.19Q74.09 608.19 76.45 608.07Q78.81 607.94 81.17 607.74Q83.53 607.54 85.89 607.43Q88.25 607.31 90.62 608.15Q93 608.99 93 609Q93 609 93 609Q93 609.01 90.66 609.92Q88.32 610.83 85.96 610.81Q83.61 610.79 81.25 610.71Q78.89 610.63 76.54 610.65Q74.18 610.67 71.83 610.83Q69.48 610.99 67.13 611.23Q64.79 611.47 62.39 610.74Q60 610.01 60 610Z" fill="#ad5538" opacity="1" data-ink="pressure"/>

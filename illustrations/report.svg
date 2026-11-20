@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 5·2</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">处理等待，不替成果盖章</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">示意：任务回报的处理记录，与成果验收分别保存。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">示意：任务回报的处理记录，与成果验收分别保存。</text>
 <path d="M60 165 Q600 165.39 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M85 225 Q258 224.53 431 226 Q434 370.5 433 515 Q258 516.47 83 516 Q82 370.5 85 225 Z" fill="#e2e9e2" stroke="#c9d1c7" stroke-width="1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M87 228 Q221.49 226.06 356 227" fill="none" stroke="#c9d1c7" stroke-width="0.7" opacity="0.27" stroke-linecap="round" stroke-linejoin="round" />

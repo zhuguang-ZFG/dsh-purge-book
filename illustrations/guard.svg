@@ -145,7 +145,7 @@
 <text x="62" y="48" fill="#637c80" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="2">拆闸 / 工程手记</text>
 <text x="1138" y="48" fill="#637c80" font-family="Consolas, Liberation Mono, monospace" font-size="15" font-weight="normal" text-anchor="end" letter-spacing="2">PLATE 3·2</text>
 <text x="60" y="108" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="39" font-weight="normal" text-anchor="start" letter-spacing="0">同包去重，两包仍各改一次</text>
-<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">离线假对象实验：观察调用次数，不发送模型请求。</text>
+<text x="62" y="145" fill="#637c80" font-family="Microsoft YaHei, Noto Sans SC, Noto Sans CJK SC, sans-serif" font-size="21" font-weight="normal" text-anchor="start" letter-spacing="0">离线假对象实验：观察调用次数，不发送模型请求。</text>
 <path d="M60 165 Q600 165.03 1140 165.6" fill="none" stroke="#c9d1c7" stroke-width="1.1" opacity="1" stroke-linecap="round" stroke-linejoin="round" />
 <text x="70" y="244" fill="#173f50" font-family="KaiTi, STKaiti, Noto Serif CJK SC, serif" font-size="27" font-weight="normal" text-anchor="start" letter-spacing="0">同包两次</text>
 <path d="M267 209 Q387.5 208.78 508 210 Q511 245 510 280 Q387.5 281.22 265 281 Q264 245 267 209 Z" fill="#e2e9e2" opacity="1" />

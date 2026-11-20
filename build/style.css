@@ -4,7 +4,7 @@
   margin: 18mm 16mm 20mm 16mm;
   @bottom-center {
     content: "拆闸  ·  " counter(page);
-    font: 8pt "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    font: 8pt "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
     color: #637c80;
   }
 }
@@ -14,7 +14,7 @@
 html { font-size: 10.5pt; }
 
 body {
-  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
   line-height: 1.68;
   color: #1a1a1a;
   max-width: none;
@@ -23,7 +23,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+  font-family: "Microsoft YaHei", "微软雅黑", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
   line-height: 1.4;
   color: #111;
   page-break-after: avoid;

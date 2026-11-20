@@ -11,7 +11,7 @@
 固定 CI 工具版本见 build/toolchain.json（pandoc 3.14、Chrome for Testing 158.0.8127.36、Bun 1.3.14、Python 3.13.14、Node 24.14.0）；EPUBCheck 需要 Java 17。本轮 Windows 使用已安装的 Chrome 157.0.8103.80，实际版本单独记录；该版本不在 Chrome for Testing 下载表中。Windows 下使用 Git Bash 运行构建脚本。
 
 ```bash
-python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0
+python -m pip install pypdf==6.21.2 PyMuPDF==1.28.0 fonttools==4.66.1
 (cd build && PUPPETEER_SKIP_DOWNLOAD=1 bun install --frozen-lockfile)
 bash build/build.sh
 python build/check_book.py
@@ -23,6 +23,8 @@ python examples/label-task/verify.py
 ```
 
 验收覆盖 9 个 Mermaid 图块、16 张手绘图、11 个 EPUB 正文章节、25 个非线性原图页，以及书签、链接、纸本目录页码、元数据、基线与术语回指。每图的编号短书签只出现一次；目标页内容和实际纵向位置都要对应。流程图全部标签须在 PDF 同一页可提取。
+
+Linux CI 用 `build/prepare_fonts.py` 下载固定提交的 Noto Sans SC TrueType 字体并校验 SHA-256，再按本书字符生成常规、粗体两份子集。此步骤保留原始汉字，去掉未使用的部首字符映射，避免 Chrome 导出的 PDF 把“门、车、马、齐、见”等字复制成部首符号。成书检查继续逐字核对标题和完整图注，并另查部首污染；不能用放宽文字断言掩盖字体问题。字体来源、原始摘要和子集摘要保存在 `build/tmp/fonts/font-report.json`。Windows 优先使用已安装的微软雅黑；跨平台页数可不同。
 
 `check_print.py` 检查孤页、跨页表格末尾单行，以及最终 PDF 图区内的中文实际字号（至少 8.5 磅；装饰英文与代码不在此阈值内）。`check_reading.mjs` 用 epub.js 0.3.93 打开实际 EPUB：11 章分别在 320/390 像素与 100%/150% 字号下检查溢出、表格字段名、左对齐和图片；再检查 33 个索引跳转、25 个原图页与返回，以及向前/向后翻页。报告与截图写入 `build/tmp/reading-check/`。新增 22 个缺失字体回退场景；MuPDF 1.28.0 另在 320/390 像素与 16/24 磅下独立重排，核对图片解码、链接、中文与横向边界。长标识使用无新增字符的 span 分段换行，复制文字保持原样；表格采用不依赖媒体查询的字段卡。两套引擎检查不能替代 Apple Books、微信读书、Kindle 等各自的实机验收。
 
