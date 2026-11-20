@@ -143,6 +143,7 @@ figcaption { font-size: 9pt; color: #555; }
 .book-figure { break-inside: avoid; page-break-inside: avoid; }
 .case-note { margin: 1em 0; padding: .6em .9em; border-left: 2px solid #ad5538; background: #faf7ef; break-inside: avoid; }
 .compact-table { break-inside: avoid; page-break-inside: avoid; }
+.compact-section { break-inside: avoid; page-break-inside: avoid; }
 .toc-page { float: right; min-width: 2em; text-align: right; font-variant-numeric: tabular-nums; }
 #TOC a { display: block; padding-right: .2em; }
 
